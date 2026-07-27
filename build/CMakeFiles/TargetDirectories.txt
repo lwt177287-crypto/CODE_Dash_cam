@@ -1,0 +1,3 @@
+/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles/rebuild_cache.dir
+/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles/edit_cache.dir
+/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles/main.dir
