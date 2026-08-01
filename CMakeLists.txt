@@ -20,6 +20,11 @@ src/JPEG-C.c
 src/JPEG-X.c
 src/video_car.c
 src/v_c_Exe_main.c
+src/settings.c
+src/sms.c
+src/key_board.c
+
+
 )
 #添加目标和依赖
 add_executable(
@@ -38,3 +43,4 @@ target_link_directories(${TARGET}
                                 jpeg
                                 pthread
                                 )
+

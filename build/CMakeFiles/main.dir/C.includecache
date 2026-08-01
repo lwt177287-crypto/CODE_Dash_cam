@@ -22,7 +22,9 @@ jpegint.h
 jerror.h
 ../include/jerror.h
 
-../include/video_car_exe.h
+../include/video_car.h
+arpa/inet.h
+-
 stdio.h
 -
 time.h
@@ -81,42 +83,56 @@ semaphore.h
 -
 semaphore.h
 -
-
-/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/Album.c
-
-/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/JPEG-C.c
-stdio.h
+sys/socket.h
 -
-stdlib.h
+netinet/ip.h
 -
-jpeglib.h
-/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/jpeglib.h
-video_car_exe.h
-/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/video_car_exe.h
+netinet/in.h
+-
+
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/Album.c
+video_car.h
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/video_car.h
+
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/JPEG-C.c
+video_car.h
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/video_car.h
 setjmp.h
 -
 
-/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/JPEG-X.c
-video_car_exe.h
-/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/video_car_exe.h
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/JPEG-X.c
+video_car.h
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/video_car.h
 
-/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/child.c
-video_car_exe.h
-/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/video_car_exe.h
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/child.c
+video_car.h
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/video_car.h
 
-/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/ent0.c
-video_car_exe.h
-/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/video_car_exe.h
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/ent0.c
+video_car.h
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/video_car.h
 
-/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/jly.c
-video_car_exe.h
-/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/video_car_exe.h
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/jly.c
+video_car.h
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/video_car.h
 
-/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/v_c_Exe_main.c
-video_car_exe.h
-/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/video_car_exe.h
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/key_board.c
+video_car.h
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/video_car.h
 
-/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/video_car.c
-video_car_exe.h
-/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/video_car_exe.h
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/settings.c
+video_car.h
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/video_car.h
+
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/sms.c
+video_car.h
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/video_car.h
+
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/v_c_Exe_main.c
+video_car.h
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/video_car.h
+
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/video_car.c
+video_car.h
+/home/dante/桌面/ketang/Initial/video_car/CODE/src/video_car.h
 

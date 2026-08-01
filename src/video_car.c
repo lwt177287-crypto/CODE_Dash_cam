@@ -1,4 +1,5 @@
-#include "video_car_exe.h"
+#include "video_car.h"
+
 #define CLEAR(x) memset (&(x), 0, sizeof (x))
 static char *           dev_name        = "/dev/video7";
 static char *         filename      = NULL;
@@ -22,15 +23,14 @@ void Open_Video()
 
     mainloop ();
 
-// stop_capturing ();
 
-// uninit_device ();
 
-// close_device ();
+    //退出处理
+
 
 // exit (EXIT_SUCCESS);
 
-  
+
 }
 
 
@@ -209,10 +209,10 @@ mainloop()
         tv.tv_usec = 0;
         select (fd + 1, &fds, NULL, NULL, &tv);
        
-        char *car_video[200];
+        char *car_video[200];           //////这个还没清空，要申请堆空间
        
         //循环 出队->处理->入队
-        for (buf_i = 0; buf_i  < 4;  ) 
+        for (buf_i = 0; buf_i  < 4;  ++buf_i ) 
         {
             //读取图像帧并进行颜色转码，刷新到LCD
             CLEAR (buf);
@@ -231,21 +231,19 @@ mainloop()
 
          
                //点击关机
-            if(CLOSE&&Interface==1)
+            if(SET_SHUTDOWN&&set_flgs==1)
             {
-                  for (int i= 0; i < 4; ++i)
-                {
-                    munmap(buffers[i].start,buffers[i].length);
-                        close(fd);
+
+                    stop_capturing ();
+                
+                   uninit_device ();
+
+                     close_device ();
+
                         return ;
-                }
             }   
-            //创建一个buf结构体tmp
             //缓冲区入队
              ioctl (fd, VIDIOC_QBUF, &buf);
-                pthread_mutex_lock(&mutex_reading_flgs);
-                ++buf_i;
-                pthread_mutex_unlock(&mutex_reading_flgs);
 
     }
   
@@ -253,6 +251,50 @@ mainloop()
     }
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+static void
+stop_capturing                  (void)
+{
+        enum v4l2_buf_type type;
+		type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+		ioctl (fd, VIDIOC_STREAMOFF, &type);
+
+}
+
+
+
+static void
+uninit_device                   (void)
+{
+        unsigned int i;
+
+		for (i = 0; i < n_buffers; ++i)
+		munmap (buffers[i].start, buffers[i].length);
+        	free (buffers);
+}
+
+
+static void
+close_device                    (void)
+{
+              close (fd);
+        fd = -1;
+        // exit (EXIT_SUCCESS);
+}
+
+
 
 
 //录像函数，其实也就是转成一堆帧图片，并且循环播放

@@ -1,4 +1,3 @@
-#include <stdio.h>
 //将数据转成图片
 /*
  * Include file for users of JPEG library.
@@ -7,9 +6,8 @@
  * (stdio.h is sufficient on ANSI-conforming systems.)
  * You may also wish to include "jerror.h".
  */
-#include <stdlib.h>
-#include "jpeglib.h"
-#include "video_car_exe.h"
+#include "video_car.h"
+
 
 /*
  * <setjmp.h> is used for the optional error recovery mechanism shown in

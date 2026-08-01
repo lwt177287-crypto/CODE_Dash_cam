@@ -1,4 +1,4 @@
-# Install script for directory: /home/dante/桌面/ketang/IO_one/shiyan/CODE
+# Install script for directory: /home/dante/桌面/ketang/Initial/video_car/CODE
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/dante/桌面/ketang/Initial/video_car/CODE/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

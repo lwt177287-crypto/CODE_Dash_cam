@@ -1,4 +1,6 @@
-#include "video_car_exe.h"
+#include "video_car.h"
+
+
 
 //传入文件名显示jpg图片
 //将图片转为数据
@@ -97,13 +99,15 @@ int read_JPEG_file (char * filename, unsigned int *mp)
      * more than one scanline at a time if that's more convenient.
      */
     //读取一行数据
+
     (void) jpeg_read_scanlines(&cinfo, &buffer, 1);
     //转到开发板
     unsigned int a;
     for(int i=0;i<cinfo.output_width;i++)
     {
-        a=buffer[i*3]<<16|buffer[i*3+1]<<8|buffer[i*3+2];
-        *(mp+i+(cinfo.output_scanline-1)*WIDTH)=a;    //可设置起点
+      
+      a=buffer[i*3]<<16|buffer[i*3+1]<<8|buffer[i*3+2];
+      *(mp+i+(cinfo.output_scanline-1)*WIDTH)=a;    //可设置起点
     }
   }
 

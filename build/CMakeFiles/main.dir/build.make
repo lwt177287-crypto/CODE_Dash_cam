@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/dante/桌面/ketang/IO_one/shiyan/CODE
+CMAKE_SOURCE_DIR = /home/dante/桌面/ketang/Initial/video_car/CODE
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/dante/桌面/ketang/IO_one/shiyan/CODE/build
+CMAKE_BINARY_DIR = /home/dante/桌面/ketang/Initial/video_car/CODE/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/main.dir/depend.make
@@ -59,107 +59,146 @@ include CMakeFiles/main.dir/flags.make
 
 CMakeFiles/main.dir/src/Album.c.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/Album.c.o: ../src/Album.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/main.dir/src/Album.c.o"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/main.dir/src/Album.c.o   -c /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/Album.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/main.dir/src/Album.c.o"
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/main.dir/src/Album.c.o   -c /home/dante/桌面/ketang/Initial/video_car/CODE/src/Album.c
 
 CMakeFiles/main.dir/src/Album.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/main.dir/src/Album.c.i"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/Album.c > CMakeFiles/main.dir/src/Album.c.i
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dante/桌面/ketang/Initial/video_car/CODE/src/Album.c > CMakeFiles/main.dir/src/Album.c.i
 
 CMakeFiles/main.dir/src/Album.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/main.dir/src/Album.c.s"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/Album.c -o CMakeFiles/main.dir/src/Album.c.s
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dante/桌面/ketang/Initial/video_car/CODE/src/Album.c -o CMakeFiles/main.dir/src/Album.c.s
 
 CMakeFiles/main.dir/src/child.c.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/child.c.o: ../src/child.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/main.dir/src/child.c.o"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/main.dir/src/child.c.o   -c /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/child.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/main.dir/src/child.c.o"
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/main.dir/src/child.c.o   -c /home/dante/桌面/ketang/Initial/video_car/CODE/src/child.c
 
 CMakeFiles/main.dir/src/child.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/main.dir/src/child.c.i"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/child.c > CMakeFiles/main.dir/src/child.c.i
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dante/桌面/ketang/Initial/video_car/CODE/src/child.c > CMakeFiles/main.dir/src/child.c.i
 
 CMakeFiles/main.dir/src/child.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/main.dir/src/child.c.s"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/child.c -o CMakeFiles/main.dir/src/child.c.s
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dante/桌面/ketang/Initial/video_car/CODE/src/child.c -o CMakeFiles/main.dir/src/child.c.s
 
 CMakeFiles/main.dir/src/ent0.c.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/ent0.c.o: ../src/ent0.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/main.dir/src/ent0.c.o"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/main.dir/src/ent0.c.o   -c /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/ent0.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/main.dir/src/ent0.c.o"
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/main.dir/src/ent0.c.o   -c /home/dante/桌面/ketang/Initial/video_car/CODE/src/ent0.c
 
 CMakeFiles/main.dir/src/ent0.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/main.dir/src/ent0.c.i"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/ent0.c > CMakeFiles/main.dir/src/ent0.c.i
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dante/桌面/ketang/Initial/video_car/CODE/src/ent0.c > CMakeFiles/main.dir/src/ent0.c.i
 
 CMakeFiles/main.dir/src/ent0.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/main.dir/src/ent0.c.s"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/ent0.c -o CMakeFiles/main.dir/src/ent0.c.s
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dante/桌面/ketang/Initial/video_car/CODE/src/ent0.c -o CMakeFiles/main.dir/src/ent0.c.s
 
 CMakeFiles/main.dir/src/jly.c.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/jly.c.o: ../src/jly.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/main.dir/src/jly.c.o"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/main.dir/src/jly.c.o   -c /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/jly.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/main.dir/src/jly.c.o"
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/main.dir/src/jly.c.o   -c /home/dante/桌面/ketang/Initial/video_car/CODE/src/jly.c
 
 CMakeFiles/main.dir/src/jly.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/main.dir/src/jly.c.i"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/jly.c > CMakeFiles/main.dir/src/jly.c.i
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dante/桌面/ketang/Initial/video_car/CODE/src/jly.c > CMakeFiles/main.dir/src/jly.c.i
 
 CMakeFiles/main.dir/src/jly.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/main.dir/src/jly.c.s"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/jly.c -o CMakeFiles/main.dir/src/jly.c.s
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dante/桌面/ketang/Initial/video_car/CODE/src/jly.c -o CMakeFiles/main.dir/src/jly.c.s
 
 CMakeFiles/main.dir/src/JPEG-C.c.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/JPEG-C.c.o: ../src/JPEG-C.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/main.dir/src/JPEG-C.c.o"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/main.dir/src/JPEG-C.c.o   -c /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/JPEG-C.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/main.dir/src/JPEG-C.c.o"
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/main.dir/src/JPEG-C.c.o   -c /home/dante/桌面/ketang/Initial/video_car/CODE/src/JPEG-C.c
 
 CMakeFiles/main.dir/src/JPEG-C.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/main.dir/src/JPEG-C.c.i"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/JPEG-C.c > CMakeFiles/main.dir/src/JPEG-C.c.i
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dante/桌面/ketang/Initial/video_car/CODE/src/JPEG-C.c > CMakeFiles/main.dir/src/JPEG-C.c.i
 
 CMakeFiles/main.dir/src/JPEG-C.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/main.dir/src/JPEG-C.c.s"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/JPEG-C.c -o CMakeFiles/main.dir/src/JPEG-C.c.s
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dante/桌面/ketang/Initial/video_car/CODE/src/JPEG-C.c -o CMakeFiles/main.dir/src/JPEG-C.c.s
 
 CMakeFiles/main.dir/src/JPEG-X.c.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/JPEG-X.c.o: ../src/JPEG-X.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/main.dir/src/JPEG-X.c.o"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/main.dir/src/JPEG-X.c.o   -c /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/JPEG-X.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/main.dir/src/JPEG-X.c.o"
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/main.dir/src/JPEG-X.c.o   -c /home/dante/桌面/ketang/Initial/video_car/CODE/src/JPEG-X.c
 
 CMakeFiles/main.dir/src/JPEG-X.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/main.dir/src/JPEG-X.c.i"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/JPEG-X.c > CMakeFiles/main.dir/src/JPEG-X.c.i
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dante/桌面/ketang/Initial/video_car/CODE/src/JPEG-X.c > CMakeFiles/main.dir/src/JPEG-X.c.i
 
 CMakeFiles/main.dir/src/JPEG-X.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/main.dir/src/JPEG-X.c.s"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/JPEG-X.c -o CMakeFiles/main.dir/src/JPEG-X.c.s
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dante/桌面/ketang/Initial/video_car/CODE/src/JPEG-X.c -o CMakeFiles/main.dir/src/JPEG-X.c.s
 
 CMakeFiles/main.dir/src/video_car.c.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/video_car.c.o: ../src/video_car.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/main.dir/src/video_car.c.o"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/main.dir/src/video_car.c.o   -c /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/video_car.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/main.dir/src/video_car.c.o"
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/main.dir/src/video_car.c.o   -c /home/dante/桌面/ketang/Initial/video_car/CODE/src/video_car.c
 
 CMakeFiles/main.dir/src/video_car.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/main.dir/src/video_car.c.i"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/video_car.c > CMakeFiles/main.dir/src/video_car.c.i
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dante/桌面/ketang/Initial/video_car/CODE/src/video_car.c > CMakeFiles/main.dir/src/video_car.c.i
 
 CMakeFiles/main.dir/src/video_car.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/main.dir/src/video_car.c.s"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/video_car.c -o CMakeFiles/main.dir/src/video_car.c.s
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dante/桌面/ketang/Initial/video_car/CODE/src/video_car.c -o CMakeFiles/main.dir/src/video_car.c.s
 
 CMakeFiles/main.dir/src/v_c_Exe_main.c.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/src/v_c_Exe_main.c.o: ../src/v_c_Exe_main.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/main.dir/src/v_c_Exe_main.c.o"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/main.dir/src/v_c_Exe_main.c.o   -c /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/v_c_Exe_main.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/main.dir/src/v_c_Exe_main.c.o"
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/main.dir/src/v_c_Exe_main.c.o   -c /home/dante/桌面/ketang/Initial/video_car/CODE/src/v_c_Exe_main.c
 
 CMakeFiles/main.dir/src/v_c_Exe_main.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/main.dir/src/v_c_Exe_main.c.i"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/v_c_Exe_main.c > CMakeFiles/main.dir/src/v_c_Exe_main.c.i
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dante/桌面/ketang/Initial/video_car/CODE/src/v_c_Exe_main.c > CMakeFiles/main.dir/src/v_c_Exe_main.c.i
 
 CMakeFiles/main.dir/src/v_c_Exe_main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/main.dir/src/v_c_Exe_main.c.s"
-	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dante/桌面/ketang/IO_one/shiyan/CODE/src/v_c_Exe_main.c -o CMakeFiles/main.dir/src/v_c_Exe_main.c.s
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dante/桌面/ketang/Initial/video_car/CODE/src/v_c_Exe_main.c -o CMakeFiles/main.dir/src/v_c_Exe_main.c.s
+
+CMakeFiles/main.dir/src/settings.c.o: CMakeFiles/main.dir/flags.make
+CMakeFiles/main.dir/src/settings.c.o: ../src/settings.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/main.dir/src/settings.c.o"
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/main.dir/src/settings.c.o   -c /home/dante/桌面/ketang/Initial/video_car/CODE/src/settings.c
+
+CMakeFiles/main.dir/src/settings.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/main.dir/src/settings.c.i"
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dante/桌面/ketang/Initial/video_car/CODE/src/settings.c > CMakeFiles/main.dir/src/settings.c.i
+
+CMakeFiles/main.dir/src/settings.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/main.dir/src/settings.c.s"
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dante/桌面/ketang/Initial/video_car/CODE/src/settings.c -o CMakeFiles/main.dir/src/settings.c.s
+
+CMakeFiles/main.dir/src/sms.c.o: CMakeFiles/main.dir/flags.make
+CMakeFiles/main.dir/src/sms.c.o: ../src/sms.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object CMakeFiles/main.dir/src/sms.c.o"
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/main.dir/src/sms.c.o   -c /home/dante/桌面/ketang/Initial/video_car/CODE/src/sms.c
+
+CMakeFiles/main.dir/src/sms.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/main.dir/src/sms.c.i"
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dante/桌面/ketang/Initial/video_car/CODE/src/sms.c > CMakeFiles/main.dir/src/sms.c.i
+
+CMakeFiles/main.dir/src/sms.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/main.dir/src/sms.c.s"
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dante/桌面/ketang/Initial/video_car/CODE/src/sms.c -o CMakeFiles/main.dir/src/sms.c.s
+
+CMakeFiles/main.dir/src/key_board.c.o: CMakeFiles/main.dir/flags.make
+CMakeFiles/main.dir/src/key_board.c.o: ../src/key_board.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object CMakeFiles/main.dir/src/key_board.c.o"
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/main.dir/src/key_board.c.o   -c /home/dante/桌面/ketang/Initial/video_car/CODE/src/key_board.c
+
+CMakeFiles/main.dir/src/key_board.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/main.dir/src/key_board.c.i"
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dante/桌面/ketang/Initial/video_car/CODE/src/key_board.c > CMakeFiles/main.dir/src/key_board.c.i
+
+CMakeFiles/main.dir/src/key_board.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/main.dir/src/key_board.c.s"
+	/usr/local/arm/5.4.0/usr/bin/arm-linux-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dante/桌面/ketang/Initial/video_car/CODE/src/key_board.c -o CMakeFiles/main.dir/src/key_board.c.s
 
 # Object files for target main
 main_OBJECTS = \
@@ -170,7 +209,10 @@ main_OBJECTS = \
 "CMakeFiles/main.dir/src/JPEG-C.c.o" \
 "CMakeFiles/main.dir/src/JPEG-X.c.o" \
 "CMakeFiles/main.dir/src/video_car.c.o" \
-"CMakeFiles/main.dir/src/v_c_Exe_main.c.o"
+"CMakeFiles/main.dir/src/v_c_Exe_main.c.o" \
+"CMakeFiles/main.dir/src/settings.c.o" \
+"CMakeFiles/main.dir/src/sms.c.o" \
+"CMakeFiles/main.dir/src/key_board.c.o"
 
 # External object files for target main
 main_EXTERNAL_OBJECTS =
@@ -183,9 +225,12 @@ main: CMakeFiles/main.dir/src/JPEG-C.c.o
 main: CMakeFiles/main.dir/src/JPEG-X.c.o
 main: CMakeFiles/main.dir/src/video_car.c.o
 main: CMakeFiles/main.dir/src/v_c_Exe_main.c.o
+main: CMakeFiles/main.dir/src/settings.c.o
+main: CMakeFiles/main.dir/src/sms.c.o
+main: CMakeFiles/main.dir/src/key_board.c.o
 main: CMakeFiles/main.dir/build.make
 main: CMakeFiles/main.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking C executable main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking C executable main"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/main.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -198,6 +243,6 @@ CMakeFiles/main.dir/clean:
 .PHONY : CMakeFiles/main.dir/clean
 
 CMakeFiles/main.dir/depend:
-	cd /home/dante/桌面/ketang/IO_one/shiyan/CODE/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/dante/桌面/ketang/IO_one/shiyan/CODE /home/dante/桌面/ketang/IO_one/shiyan/CODE /home/dante/桌面/ketang/IO_one/shiyan/CODE/build /home/dante/桌面/ketang/IO_one/shiyan/CODE/build /home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles/main.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/dante/桌面/ketang/Initial/video_car/CODE/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/dante/桌面/ketang/Initial/video_car/CODE /home/dante/桌面/ketang/Initial/video_car/CODE /home/dante/桌面/ketang/Initial/video_car/CODE/build /home/dante/桌面/ketang/Initial/video_car/CODE/build /home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles/main.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/main.dir/depend
 

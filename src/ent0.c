@@ -1,27 +1,25 @@
-#include "video_car_exe.h"
+#include "video_car.h"
 
 //触摸屏代码
 void Abs_Cat( int event_fd, struct input_event * ev0)
 {
 
 
-        int a= read(event_fd,ev0,sizeof(struct input_event));
-        if(ev0->type==EV_ABS)
+    int a= read(event_fd,ev0,sizeof(struct input_event));
+    if(ev0->type==EV_ABS)
+    {
+        if(ev0->code== ABS_X)
         {
-            if(ev0->code== ABS_X)
-            {
-                 pthread_mutex_lock(&mutex_en0_ABS_flgs);
-                en0_x=ev0->value*800/1024;
-                pthread_mutex_unlock( &mutex_en0_ABS_flgs);
-            }
-            if(ev0->code== ABS_Y)
-            {
-                 pthread_mutex_lock(&mutex_en0_ABS_flgs);
-                en0_y=ev0->value*480/600;
-                pthread_mutex_unlock( &mutex_en0_ABS_flgs);
-                printf("x=%d,y=%d\n",en0_x,en0_y);
-            } 
+            pthread_mutex_lock(&mutex_en0_ABS_flgs);
+            en0_x=ev0->value*800/1024;
         }
+        if(ev0->code== ABS_Y)
+        {
+            en0_y=ev0->value*480/600;
+            printf("x=%d,y=%d\n",en0_x,en0_y);
+            pthread_mutex_unlock( &mutex_en0_ABS_flgs);
+        } 
+    }
 }
 
 

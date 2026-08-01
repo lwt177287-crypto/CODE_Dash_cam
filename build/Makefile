@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/dante/桌面/ketang/IO_one/shiyan/CODE
+CMAKE_SOURCE_DIR = /home/dante/桌面/ketang/Initial/video_car/CODE
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/dante/桌面/ketang/IO_one/shiyan/CODE/build
+CMAKE_BINARY_DIR = /home/dante/桌面/ketang/Initial/video_car/CODE/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles /home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles /home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -285,6 +285,87 @@ src/jly.c.s:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/jly.c.s
 .PHONY : src/jly.c.s
 
+src/key_board.o: src/key_board.c.o
+
+.PHONY : src/key_board.o
+
+# target to build an object file
+src/key_board.c.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/key_board.c.o
+.PHONY : src/key_board.c.o
+
+src/key_board.i: src/key_board.c.i
+
+.PHONY : src/key_board.i
+
+# target to preprocess a source file
+src/key_board.c.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/key_board.c.i
+.PHONY : src/key_board.c.i
+
+src/key_board.s: src/key_board.c.s
+
+.PHONY : src/key_board.s
+
+# target to generate assembly for a file
+src/key_board.c.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/key_board.c.s
+.PHONY : src/key_board.c.s
+
+src/settings.o: src/settings.c.o
+
+.PHONY : src/settings.o
+
+# target to build an object file
+src/settings.c.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/settings.c.o
+.PHONY : src/settings.c.o
+
+src/settings.i: src/settings.c.i
+
+.PHONY : src/settings.i
+
+# target to preprocess a source file
+src/settings.c.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/settings.c.i
+.PHONY : src/settings.c.i
+
+src/settings.s: src/settings.c.s
+
+.PHONY : src/settings.s
+
+# target to generate assembly for a file
+src/settings.c.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/settings.c.s
+.PHONY : src/settings.c.s
+
+src/sms.o: src/sms.c.o
+
+.PHONY : src/sms.o
+
+# target to build an object file
+src/sms.c.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/sms.c.o
+.PHONY : src/sms.c.o
+
+src/sms.i: src/sms.c.i
+
+.PHONY : src/sms.i
+
+# target to preprocess a source file
+src/sms.c.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/sms.c.i
+.PHONY : src/sms.c.i
+
+src/sms.s: src/sms.c.s
+
+.PHONY : src/sms.s
+
+# target to generate assembly for a file
+src/sms.c.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/sms.c.s
+.PHONY : src/sms.c.s
+
 src/v_c_Exe_main.o: src/v_c_Exe_main.c.o
 
 .PHONY : src/v_c_Exe_main.o
@@ -366,6 +447,15 @@ help:
 	@echo "... src/jly.o"
 	@echo "... src/jly.i"
 	@echo "... src/jly.s"
+	@echo "... src/key_board.o"
+	@echo "... src/key_board.i"
+	@echo "... src/key_board.s"
+	@echo "... src/settings.o"
+	@echo "... src/settings.i"
+	@echo "... src/settings.s"
+	@echo "... src/sms.o"
+	@echo "... src/sms.i"
+	@echo "... src/sms.s"
 	@echo "... src/v_c_Exe_main.o"
 	@echo "... src/v_c_Exe_main.i"
 	@echo "... src/v_c_Exe_main.s"

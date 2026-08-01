@@ -4,14 +4,17 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/Album.c" "/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles/main.dir/src/Album.c.o"
-  "/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/JPEG-C.c" "/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles/main.dir/src/JPEG-C.c.o"
-  "/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/JPEG-X.c" "/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles/main.dir/src/JPEG-X.c.o"
-  "/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/child.c" "/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles/main.dir/src/child.c.o"
-  "/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/ent0.c" "/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles/main.dir/src/ent0.c.o"
-  "/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/jly.c" "/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles/main.dir/src/jly.c.o"
-  "/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/v_c_Exe_main.c" "/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles/main.dir/src/v_c_Exe_main.c.o"
-  "/home/dante/桌面/ketang/IO_one/shiyan/CODE/src/video_car.c" "/home/dante/桌面/ketang/IO_one/shiyan/CODE/build/CMakeFiles/main.dir/src/video_car.c.o"
+  "/home/dante/桌面/ketang/Initial/video_car/CODE/src/Album.c" "/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles/main.dir/src/Album.c.o"
+  "/home/dante/桌面/ketang/Initial/video_car/CODE/src/JPEG-C.c" "/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles/main.dir/src/JPEG-C.c.o"
+  "/home/dante/桌面/ketang/Initial/video_car/CODE/src/JPEG-X.c" "/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles/main.dir/src/JPEG-X.c.o"
+  "/home/dante/桌面/ketang/Initial/video_car/CODE/src/child.c" "/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles/main.dir/src/child.c.o"
+  "/home/dante/桌面/ketang/Initial/video_car/CODE/src/ent0.c" "/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles/main.dir/src/ent0.c.o"
+  "/home/dante/桌面/ketang/Initial/video_car/CODE/src/jly.c" "/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles/main.dir/src/jly.c.o"
+  "/home/dante/桌面/ketang/Initial/video_car/CODE/src/key_board.c" "/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles/main.dir/src/key_board.c.o"
+  "/home/dante/桌面/ketang/Initial/video_car/CODE/src/settings.c" "/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles/main.dir/src/settings.c.o"
+  "/home/dante/桌面/ketang/Initial/video_car/CODE/src/sms.c" "/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles/main.dir/src/sms.c.o"
+  "/home/dante/桌面/ketang/Initial/video_car/CODE/src/v_c_Exe_main.c" "/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles/main.dir/src/v_c_Exe_main.c.o"
+  "/home/dante/桌面/ketang/Initial/video_car/CODE/src/video_car.c" "/home/dante/桌面/ketang/Initial/video_car/CODE/build/CMakeFiles/main.dir/src/video_car.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

@@ -1,4 +1,4 @@
-#include "video_car_exe.h"
+#include "video_car.h"
 //感悟：捋好每一步逻辑，标志位记录功能开关，信号量控制执行顺序，互斥锁防止同时访问
 //重复代码段减少，且将一些特定的步骤封装成函数，不要将代码搞得太复杂，无用步骤别做
 //线程间配合紧密，触摸参数xy要及时清零但不能提前，这个坐标没有用再清
@@ -9,6 +9,11 @@
 //互斥锁和信号量要细化，可以很好的给不同的内存一起访问，而同一块内存禁止访问
 //点击按键坐标是否有效，要看现在在哪个界面，每个坐标判断都要加当前界面判断
 //关机要释放资源
+
+//焚诀：重复点击关闭时，可这样设计，一个大判断为是否点击与是否在此页面，然后小判断，判断次功能是否已经开启，若开启则关闭，若未开启则开启
+//则关闭，若关闭则开启，坐标已经清空，不会开启的同时关闭，值得注意的是标志位都是出来再关闭，耦合度难免增加
+//其实也可以加互斥锁，一个锁标志位改变，一个锁判断进入
+//if判断进入每个线程是否都需要有一个判断标志位来识别是否退出
 void  lcd_round1_exit();
 void  lcd_line_exit();
 
@@ -24,14 +29,16 @@ void *child_ent0(void * a)
      for(;;)
         {  
             //关机检测
-                 if(CLOSE&&Interface==1) 
-                 {
-                    free(ev0);
-                    close(event_fd);
-                    pthread_exit(NULL);
-                 }
-              else   //检测触控
-                Abs_Cat(event_fd,ev0);
+            if(SET_SHUTDOWN&&set_flgs==1) 
+            {
+            printf("退出触摸\n");
+            free(ev0);
+            close(event_fd);
+            pthread_exit(NULL);
+            }
+            else   //检测触控
+            Abs_Cat(event_fd,ev0);
+        
         }
 
 }
@@ -41,20 +48,21 @@ void *child_video(void * a)
 {
   //在里面释放
     Open_Video();
+    printf("退出摄像头\n");
     pthread_exit(NULL);
 
 }
 
 //传入buffer
-void *child_lcd_buf(void * a)
+void *child_Realtime_buf(void * a)
     {
 
     //创建两个缓冲，写完第一个给lcd读，同时写第二个，lcd屏读完第一个读第二个，
     buffer_mp=(unsigned int *)
     calloc(2,IMAGE_HEIGHT *IMAGE_WIDTH*sizeof(unsigned int));
-        printf("wirte_size=%d\n",IMAGE_HEIGHT *IMAGE_WIDTH*sizeof(unsigned int));
-        write_buf=buffer_mp;
-       read_buf=buffer_mp+IMAGE_HEIGHT *IMAGE_WIDTH;
+    printf("wirte_size=%d\n",IMAGE_HEIGHT *IMAGE_WIDTH*sizeof(unsigned int));
+    write_buf=buffer_mp;
+    read_buf=buffer_mp+IMAGE_HEIGHT *IMAGE_WIDTH;
 
     for(;;)
     {  
@@ -82,7 +90,7 @@ void *child_lcd_buf(void * a)
         }
             pthread_mutex_unlock(&mutex_wr_buf_mp);
 
-        if(EIXT_FILM&&video_flgs==1)
+        if((EIXT_FILM|| REALTIME_RETURN)&&video_flgs==1)
         {
             printf("退出传输buffer\n");
             pthread_mutex_unlock( &mutex);//解锁
@@ -96,29 +104,29 @@ void *child_lcd_buf(void * a)
 
 
 //显示图片
-void * child_lcd_video(void * a)
+void * child_Realtime_video(void * a)
 {
     for(;;)
     {       
-        //等待处理过的照片
-             sem_wait(&sem2);
-        
-         pthread_mutex_lock(&mutex_wr_buf_mp);
-                  for(int i=0;i<480;i++)
-                {
-                    memcpy(mp+i*WIDTH+80,read_buf+i*IMAGE_WIDTH,IMAGE_WIDTH*4);
-                }     
+    //等待处理过的照片
+            sem_wait(&sem2);
+    
+        pthread_mutex_lock(&mutex_wr_buf_mp);
+        for(int i=0;i<480;i++)
+        {
+            memcpy(mp+i*WIDTH+80,read_buf+i*IMAGE_WIDTH,IMAGE_WIDTH*4);
+        }     
 
-                pthread_mutex_unlock(&mutex_wr_buf_mp);
- 
-                if(EIXT_FILM&&video_flgs==1)
-                {
-                    close(buffer_mp);
-                    printf("退出摄像，这是显示画面模块\n");
-                    pthread_exit(NULL);
-                }
+        pthread_mutex_unlock(&mutex_wr_buf_mp);
 
-    }  }
+        if((EIXT_FILM|| REALTIME_RETURN)&&video_flgs==1)
+        {
+            close((int)buffer_mp);
+            printf("退出摄像，这是显示画面模块\n");
+            pthread_exit(NULL);
+        }
+    } 
+}
 
 
 //辅助线
@@ -127,15 +135,15 @@ void * lcd_line(void * a)
    for(;;)
     {       
         //当辅助线重复按表示关闭
-        if(GUIDELINE&&line_pth==1)
+        if(GUIDELINE&&video_flgs==1&&line_pth==1)
         {
-             en0_clear();
+            en0_clear();
             lcd_line_exit();
         }
-        if(EIXT_FILM&&video_flgs==1&&line_pth==1)   
+        if((EIXT_FILM|| REALTIME_RETURN)&&video_flgs==1&&line_pth==1)   
         {
+            line_pth=0;
             lcd_line_exit();
-
         }
     }
           
@@ -144,9 +152,8 @@ void * lcd_line(void * a)
 //line_pth=1为开
 void  lcd_line_exit()
 {
-          line_pth=0;
-          printf("退出划线\n");
-          pthread_exit(NULL);
+    printf("退出划线\n");
+    pthread_exit(NULL);
 }
 
 
@@ -158,25 +165,26 @@ void * lcd_round1(void * a)
     for(;;)
     {
             //再次点击关闭
-        if(RECORD&&round_pth==1)   
-            {  
-                 en0_clear();
-                 lcd_round1_exit();
-            } 
+        if(REALTIME_RECOE&&video_flgs==1&&round_pth==1)   
+        {  
+            en0_clear();
+            lcd_round1_exit();
+        } 
             //关闭整个摄像机
-         if(EIXT_FILM&&video_flgs==1&&round_pth==1)   
-            {
-                 lcd_round1_exit();
-            }
-            pthread_mutex_lock(&mutex_round_flgs);//上锁防止冲突
-            round_flgs=1;   //开启圆点
-            pthread_mutex_unlock( &mutex_round_flgs);//解锁
-            usleep(1000*1000);
+         if((EIXT_FILM|| REALTIME_RETURN)&&video_flgs==1&&round_pth==1)   
+        {
+             round_pth=0;
+            lcd_round1_exit();
+        }
+        pthread_mutex_lock(&mutex_round_flgs);//上锁防止冲突
+        round_flgs=1;   //开启圆点
+        pthread_mutex_unlock( &mutex_round_flgs);//解锁
+        usleep(1000*1000);
     }
 }
     void  lcd_round1_exit()
 {
-    round_pth=0;
+   
     printf("退出录制！\n");
     pthread_exit(NULL); 
 } 
@@ -184,7 +192,7 @@ void * lcd_round1(void * a)
 
 
 //进入摄像后的按键
-void * lcd_video_key(void * a)
+void * Realtime_video_key(void * a)
 {
     printf("进入key\n");
     pthread_t  thread_line;
@@ -193,7 +201,7 @@ void * lcd_video_key(void * a)
     for(;;)
     {
         //点击退出按键
-        if(EIXT_FILM&&video_flgs==1)   
+        if((EIXT_FILM|| REALTIME_RETURN)&&video_flgs==1)   
         {
             printf("退出key\n");
             if( line_pth==1)
@@ -211,23 +219,39 @@ void * lcd_video_key(void * a)
                 pthread_exit(NULL);         
         }
             //点击录像按键
-        else if(RECORD &&video_flgs==1 &&round_pth==0)
+        else if(REALTIME_RECOE &&video_flgs==1 )
         {
-            en0_clear();
-            round_pth=1;
-            printf("进入录像\n");
-            //显示录制标志
-            pthread_create(&thread_round1, NULL,lcd_round1,NULL);
-            //开始录像
-            
+            if(round_pth==0)
+            {
+                en0_clear();
+                round_pth=1;
+                printf("进入录像\n");
+                //显示录制标志
+                pthread_create(&thread_round1, NULL,lcd_round1,NULL);
+                //开始录像
+            }
+            else if(round_pth==1)
+            {
+                pthread_join(thread_round1,NULL);
+                     round_pth=0;
+            }
         }
 
-        else if(GUIDELINE &&video_flgs==1 &&line_pth==0)
+        else if(GUIDELINE &&video_flgs==1)
         {
-            en0_clear();
-            line_pth=1;
-            printf("进入辅助线\n");
-            pthread_create(&thread_line, NULL,lcd_line,NULL);
+            if(line_pth==0)
+            {
+                en0_clear();
+                printf("进入辅助线\n");
+                pthread_create(&thread_line, NULL,lcd_line,NULL);
+                line_pth=1;
+            }
+            else if(line_pth==1)
+            {
+                pthread_join(thread_line,NULL);
+                line_pth=0;
+
+            }
         }   
     } 
 

@@ -6,5 +6,5 @@ C_FLAGS =
 
 C_DEFINES = 
 
-C_INCLUDES = -I/home/dante/桌面/ketang/IO_one/shiyan/CODE/./include 
+C_INCLUDES = -I/home/dante/桌面/ketang/Initial/video_car/CODE/./include 
 
