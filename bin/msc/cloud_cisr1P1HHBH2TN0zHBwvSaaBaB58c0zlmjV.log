@@ -1,0 +1,43 @@
+[2026/08/03 23:12:15 214] transport  1819 transport:try2send,#msg_q=  0  
+[2026/08/03 23:12:15 244] isr_1conn  289  send_ok_num, timer_num, send_average =   12444  10  1244  
+[2026/08/03 23:12:15 245] isr_1conn  292  netperf =   90  
+[2026/08/03 23:12:15 265] transport  494  [soc] [1] readable  
+[2026/08/03 23:12:15 265] transport  1767 HTTP/1.1 200 OK
+Content-Length: 8
+X-Par: ver=MSSP+0%2E9&ret=0&uid=d19417373739&rss=5&seq=0&cver=5%2E0%2E44%2E1288&eps=3&status=2&key=0f8/g6s3EooxMyistdbvi0nsz9/htYE7ZwYdSWSM3eIcc^HBywnTxKrTLbP0MAMjBYKS8dlR/lnjA^xr/Y2PS2zQ5^WQYQyQCOPsa/2Nj0ts0=
+CT: binary/recresult;charset=utf8
+CE: encrypt/0.2
+CL: 8
+X-Req-Date: 2026/08/04 14:12:15 624
+CL: 8
+X-Res-Date: 2026/08/04 14:12:15 630
+
+s¸Ñ}3¸ÒHTTP/1.1 200 OK
+Content-Type: text/plain
+Content-Length: 1
+X-Par: ver=MSSP+0%2E9&ret=0&cver=5%2E0%2E44%2E1288&rcs=2&key=0d8wW4eYtLug7f96^pkixm8e5S0XV0D6TEKJ^LJxMhPI^qNzjilnYBHgl3UYDjVFZZ
+X-Req-Date: 2026/08/04 14:12:15 630
+CL: 1
+X-Res-Date: 2026/08/04 14:12:15 631
+
+0  
+[2026/08/03 23:12:15 265] transport  1494 a_complete_httpmessage  200  
+[2026/08/03 23:12:15 265] isr_1conn  399  [trans] [isr_1conncisr1P1HHBH2TN0zHBwvSaaBaB58c0zlmjV] readable  
+[2026/08/03 23:12:15 265] isr_1conn  403  size =   61  
+[2026/08/03 23:12:15 265] isr_1conn  412  send_ok_num, timer_num, send_average =   12505  11  1136  
+[2026/08/03 23:12:15 265] isr_1conn  415  netperf =   90  
+[2026/08/03 23:12:15 265] isr_1conn  419  start netperf_grs_timer  
+[2026/08/03 23:12:15 265] isr_1conn  435  response  
+[2026/08/03 23:12:15 266] isr_1conn  483  resp_syncid =  42  
+[2026/08/03 23:12:15 266] isr_1conn  655  42  5  2  
+[2026/08/03 23:12:15 266] isr_1conn  662  [session] got last result  
+[2026/08/03 23:12:15 266] isr_1conn  667  time from last audio to last result:  102  .  
+[2026/08/03 23:12:15 266] isr_1conn  668  time from session-begin to session-end:  4234  .  
+[2026/08/03 23:12:15 266] network    90   ipfromenv ,  ipcache  open.xf-yun.com  def  nil  
+[2026/08/03 23:12:15 266] transport  1332 [soc] disconnect   
+[2026/08/03 23:12:15 267] transport  991  transport clean  
+[2026/08/03 23:12:15 267] isr_1conn  677  [session] got 1th result  
+[2026/08/03 23:12:15 267] isr_1conn  689  time from first audio to first result:  4028  .  
+[2026/08/03 23:12:15 422] isr_1conn  2060 ASR_CLOUD_MSG_SSE  
+[2026/08/03 23:12:15 424] isr_1conn  1276 isr_1conn session info  
+[2026/08/03 23:12:15 425] isr_1conn  2203 session finished! ret =   0  
