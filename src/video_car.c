@@ -2,7 +2,6 @@
 
 #define CLEAR(x) memset (&(x), 0, sizeof (x))
 static char *           dev_name        = "/dev/video7";
-static char *         filename      = NULL;
 static int              fd              = -1;
 static unsigned int     n_buffers       = 0;
 struct buffer *         buffers;
@@ -184,15 +183,7 @@ mainloop()
 {
 	struct v4l2_buffer buf;
 
-        //创建文件夹,行车记录仪的文件夹
-                chdir("/root/shiyan/CODE/Car");
-                char * filetime=calloc(1,100);
-                filename=calloc(1,100);
-                
-                File_time(filetime);
-                sprintf(filename,"%s-Car",filetime);
-                mkdir(filename,0777);
-                chdir(filename);
+      
     for (;;) 
     {
         //定义了一个文件描述符的集合
@@ -227,12 +218,15 @@ mainloop()
             pthread_mutex_lock(&mutex_reading_flgs);
             p_buffer[buf_i]=buffers[buf.index].start;
              read_index=buf_i; 
+            new_Camera_frame_flgs=1;
           pthread_mutex_unlock(&mutex_reading_flgs);
 
          
                //点击关机
             if(SET_SHUTDOWN&&set_flgs==1)
             {
+                //等待行车记录仪备份
+                    sem_post(&sem_recorder_complete);
 
                     stop_capturing ();
                 
@@ -297,18 +291,13 @@ close_device                    (void)
 
 
 
-//录像函数，其实也就是转成一堆帧图片，并且循环播放
-void Record_Video()
-{
-    
-}
 
 //在另一个进程完成，转成jpg图片,想写覆盖的尝试一下链表,时间还有问题。。(代码没问题，环境不适配)
-                // if(num<200)
-                // {
-                //     //获取时间
-                //     File_time(filetime);
-                //     sprintf(filename,"%s-car%d.jpg",filetime,num++);   
-                //     car_video[num]=filename;
-                //     write_JPEG_file (filename, 80,(char *)buffers[buf_i ].start);
-                // }
+        // if(num<200)
+        // {
+        //     //获取时间
+        //     File_time(filetime);
+        //     sprintf(filename,"%s-car%d.jpg",filetime,num++);   
+        //     car_video[num]=filename;
+        //     write_JPEG_file (filename, 80,(char *)buffers[buf_i ].start);
+        // }

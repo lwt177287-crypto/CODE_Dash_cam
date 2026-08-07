@@ -23,7 +23,11 @@ src/v_c_Exe_main.c
 src/settings.c
 src/sms.c
 src/key_board.c
-
+src/login.c
+src/freetype_lcd.c
+src/show_font.c
+src/iat_tts.c
+src/recorder.c
 
 )
 #添加目标和依赖
@@ -42,5 +46,6 @@ target_link_directories(${TARGET}
                               ${TARGET}
                                 jpeg
                                 pthread
+                                freetype
                                 )
 

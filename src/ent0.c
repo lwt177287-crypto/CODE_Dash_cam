@@ -1,24 +1,45 @@
 #include "video_car.h"
-
+int temp_x=-1;
+int temp_y=-1;
 //触摸屏代码
 void Abs_Cat( int event_fd, struct input_event * ev0)
 {
-
-
-    int a= read(event_fd,ev0,sizeof(struct input_event));
-    if(ev0->type==EV_ABS)
+    
+ 
+    int len= read(event_fd,ev0,sizeof(*ev0)*64); //可以设置宏或者传参
+    if(len<=0 || len % sizeof(struct input_event)!=0 )
     {
-        if(ev0->code== ABS_X)
+        fprintf(stderr,"input event size error\n");
+        return ;
+    }
+    int num=len/sizeof(struct input_event);
+
+    for(int i=0;i<num;i++)
+    { 
+        if(ev0[i].type==EV_ABS)
         {
-            pthread_mutex_lock(&mutex_en0_ABS_flgs);
-            en0_x=ev0->value*800/1024;
+            if(ev0[i].code== ABS_X)
+            {
+                temp_x=ev0[i].value*800/1024;
+            }
+            if(ev0[i].code== ABS_Y)
+            {
+                temp_y=ev0[i].value*480/600;
+            } 
         }
-        if(ev0->code== ABS_Y)
+        if( ev0[i].type==EV_SYN&&ev0[i].code==SYN_REPORT)
         {
-            en0_y=ev0->value*480/600;
-            printf("x=%d,y=%d\n",en0_x,en0_y);
-            pthread_mutex_unlock( &mutex_en0_ABS_flgs);
-        } 
+            if(temp_x!=-1&&temp_y!=-1)
+            { 
+                pthread_mutex_lock(&mutex_en0_ABS_flgs);
+                en0_x = temp_x;
+                en0_y = temp_y;
+                pthread_mutex_unlock(&mutex_en0_ABS_flgs);
+                printf("x=%d,y=%d\n",en0_x,en0_y);
+            }
+            temp_x=-1;
+            temp_y=-1;
+        }
     }
 }
 

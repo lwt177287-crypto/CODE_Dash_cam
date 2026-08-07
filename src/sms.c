@@ -1,5 +1,5 @@
 #include "video_car.h"
-void SMS()
+int  SMS(char * phone_number)
 {
  int socket_fd=socket(AF_INET,SOCK_STREAM ,0);
      if(-1==socket_fd)
@@ -7,7 +7,7 @@ void SMS()
         fprintf(stderr,"create socket error %s",strerror(errno));
         // close(lcd_fd);  //记得关闭文件
         exit(1);
-    }
+      }
 
 struct sockaddr_in dest_addr;
   memset(&dest_addr,0,sizeof(dest_addr));
@@ -22,14 +22,12 @@ struct sockaddr_in dest_addr;
     close(socket_fd);  //记得关闭文件
     exit(1);
   }
-  int a=(rand()+1000)%9999;
+  int a=(rand()+1000)%9000;
   printf("------------连接互亿无线成功----------------\n");
   char recvbuf[4096]={0};
     char sendbuf[4096]={0};
     char info[1024];
-    sprintf(info,"account=C86827116&password=a0f66a8e656ca53235809f8ba2d8db9d&mobile=17728752392&content=您的验证码是：%d。请不要把验证码泄露给其他人。",a);
-    
-
+    // sprintf(info,"account=C29437780&password=85908d5d3fccc78522f251c89625b9ec&mobile=%s&content=您的验证码是：%d。请不要把验证码泄露给其他人。",phone_number,a);
   sprintf(sendbuf,
         "POST /sms/Submit.json HTTP/1.1\r\n"
         "Host:api.ihuyi.com\r\n"
@@ -68,14 +66,16 @@ struct sockaddr_in dest_addr;
           int len=end-p;
           char msg[50]={0};
           strncpy(msg,p,len);
-          printf("msg=%s\n",msg);
+          printf("%s\n",msg);
           if(strcmp(msg,"提交成功")==0)
           {
             printf("发送成功\n");
+            return a;
           }
           else
           {
             printf("发送失败\n");
+            return 0;
           }
 
         }

@@ -87,8 +87,8 @@ write_JPEG_file (char * filename, int quality,  char *  buf)
     int argb1,argb2;
       for( x=0,i=0,j=0;j<480*640;i+=4,j+=2,x+=6)
         {
-               argb1= yuyv_to_rgb_pix(buf[i],buf[i+1],buf[i+3]);
-               argb2=yuyv_to_rgb_pix(buf[i+2],buf[i+1],buf[i+3]);
+              argb1= yuyv_to_rgb_pix(buf[i],buf[i+1],buf[i+3]);
+              argb2=yuyv_to_rgb_pix(buf[i+2],buf[i+1],buf[i+3]);
               image_buffer[x]=argb1>>16;
               image_buffer[x+1]=argb1>>8;
               image_buffer[x+2]=argb1;    

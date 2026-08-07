@@ -14,8 +14,15 @@
 //则关闭，若关闭则开启，坐标已经清空，不会开启的同时关闭，值得注意的是标志位都是出来再关闭，耦合度难免增加
 //其实也可以加互斥锁，一个锁标志位改变，一个锁判断进入
 //if判断进入每个线程是否都需要有一个判断标志位来识别是否退出
-void  lcd_round1_exit();
-void  lcd_line_exit();
+//坐标应该使用临时值来获取，再上锁统一赋值   新：读取堆积的事件，每个都处理，识别到SYN就输出坐标，若缺失一轴坐标则清空
+//状态机比falgs好管理
+//如果两个变量互斥建议创建枚举
+//做会员用结构体存储在文件里
+//焚诀：将每个退出都放在结构体变量中，不同结构体变量改变就代表不同结构体退出，与宏作用一样，且资源还可以统一释放
+
+
+pthread_t  thread_round1;
+pthread_t  thread_record_video;
 
 void *child_ent0(void * a)
 {
@@ -25,7 +32,7 @@ void *child_ent0(void * a)
         perror("open event_fd falied");
         exit(0);
     }
-     struct input_event * ev0=calloc(sizeof(struct input_event),1);
+     struct input_event * ev0=calloc(64,sizeof(struct input_event));
      for(;;)
         {  
             //关机检测
@@ -58,29 +65,40 @@ void *child_Realtime_buf(void * a)
     {
 
     //创建两个缓冲，写完第一个给lcd读，同时写第二个，lcd屏读完第一个读第二个，
-    buffer_mp=(unsigned int *)
-    calloc(2,IMAGE_HEIGHT *IMAGE_WIDTH*sizeof(unsigned int));
-    printf("wirte_size=%d\n",IMAGE_HEIGHT *IMAGE_WIDTH*sizeof(unsigned int));
-    write_buf=buffer_mp;
-    read_buf=buffer_mp+IMAGE_HEIGHT *IMAGE_WIDTH;
+     read_buf=(unsigned int *)
+    calloc(1,IMAGE_HEIGHT *IMAGE_WIDTH*sizeof(unsigned int));
+       write_buf=(char *)
+    calloc(1,IMAGE_HEIGHT *IMAGE_WIDTH*sizeof(char)*2);
+    // printf("wirte_size=%d\n",IMAGE_HEIGHT *IMAGE_WIDTH*sizeof(unsigned int));
 
     for(;;)
     {  
 
           pthread_mutex_lock(&mutex_reading_flgs);
-            memcpy(write_buf,p_buffer[read_index],IMAGE_WIDTH*IMAGE_HEIGHT*2);        
-            //此时write_buf已经有图片数据
+            if(round_flgs==1&&record_video_pth==0)
+            {
+                printf("识别到录制开启\n");
+                sem_post(&sem_record_video_pth);
+                memcpy(write_buf,p_buffer[read_index],IMAGE_WIDTH*IMAGE_HEIGHT*2);        
+                 sem_wait(&sem_record_video_pth);
+            
+            }  
+            else
+            {
+                memcpy(write_buf,p_buffer[read_index],IMAGE_WIDTH*IMAGE_HEIGHT*2);        
+            }
+          //此时write_buf已经有图片数据
           pthread_mutex_unlock(&mutex_reading_flgs);
 
             //转换格式,将图片塞进read_buf里
          pthread_mutex_lock(&mutex_wr_buf_mp);
           yuv2_rgb((unsigned int *) read_buf,(char *)write_buf);  //将w写到r，r供用户读
 
-          if(round_flgs==1&&round_pth==1)//显示圆圈
+          if(round_pth==1&&round_flgs==1)//显示圆圈
         {
             round1();
             pthread_mutex_lock(&mutex_round_flgs);//上锁防止冲突
-            round_flgs=0;
+            round_pth=0;
             pthread_mutex_unlock( &mutex_round_flgs);//解锁
         }      
 
@@ -93,25 +111,32 @@ void *child_Realtime_buf(void * a)
         if((EIXT_FILM|| REALTIME_RETURN)&&video_flgs==1)
         {
             printf("退出传输buffer\n");
-            pthread_mutex_unlock( &mutex);//解锁
-            sem_post(&sem2);
+            sem_post(&sem_Realtime_video);
+            if(round_flgs==1)
+            {
+                //等待圆圈线程关闭
+                pthread_join(thread_round1,NULL);
+
+            }
             pthread_exit(NULL);
         }
             pthread_mutex_unlock(&mutex_wr_buf_mp);
-            sem_post(&sem2);
+            sem_post(&sem_Realtime_video);
     }  
 }
 
 
-//显示图片
+//显示rgb
 void * child_Realtime_video(void * a)
 {
     for(;;)
     {       
-    //等待处理过的照片
-            sem_wait(&sem2);
-    
+    //等待处理过的rgb
+        sem_wait(&sem_Realtime_video);
+        
         pthread_mutex_lock(&mutex_wr_buf_mp);
+        //若录制开启且读完一帧
+    
         for(int i=0;i<480;i++)
         {
             memcpy(mp+i*WIDTH+80,read_buf+i*IMAGE_WIDTH,IMAGE_WIDTH*4);
@@ -121,7 +146,6 @@ void * child_Realtime_video(void * a)
 
         if((EIXT_FILM|| REALTIME_RETURN)&&video_flgs==1)
         {
-            close((int)buffer_mp);
             printf("退出摄像，这是显示画面模块\n");
             pthread_exit(NULL);
         }
@@ -161,23 +185,26 @@ void  lcd_line_exit()
 //显示录制标志
 void * lcd_round1(void * a)
 {
-                
+    printf("开启录制\n");
     for(;;)
     {
             //再次点击关闭
-        if(REALTIME_RECOE&&video_flgs==1&&round_pth==1)   
-        {  
+        if(REALTIME_RECOE&&video_flgs==1&&round_flgs==1)   
+        {
+            sem_wait(&sem_record_video_flgs);
             en0_clear();
-            lcd_round1_exit();
+            pthread_mutex_lock(&mutex_round_pth);
+            round_flgs=0;
+            pthread_mutex_unlock(&mutex_round_pth);
+            lcd_round1_exit();  
         } 
             //关闭整个摄像机
-         if((EIXT_FILM|| REALTIME_RETURN)&&video_flgs==1&&round_pth==1)   
+         if((EIXT_FILM|| REALTIME_RETURN)&&video_flgs==1&&round_flgs==1)   
         {
-             round_pth=0;
             lcd_round1_exit();
         }
         pthread_mutex_lock(&mutex_round_flgs);//上锁防止冲突
-        round_flgs=1;   //开启圆点
+        round_pth=1;   //开启圆点
         pthread_mutex_unlock( &mutex_round_flgs);//解锁
         usleep(1000*1000);
     }
@@ -191,12 +218,12 @@ void * lcd_round1(void * a)
 
 
 
+
 //进入摄像后的按键
 void * Realtime_video_key(void * a)
 {
     printf("进入key\n");
     pthread_t  thread_line;
-    pthread_t  thread_round1;
 
     for(;;)
     {
@@ -209,32 +236,36 @@ void * Realtime_video_key(void * a)
                 pthread_join(thread_line, NULL);
                 line_pth=0;
             }
-            if( round_pth==1)
-            {
-                pthread_join(thread_round1, NULL);
-                round_pth=0;
-            }
+            // if( round_pth1==1)
+            // {
+            //     pthread_join(thread_round1, NULL);
+            //     round_pth1=0;
+            // }
 
                 video_flgs==0;
                 pthread_exit(NULL);         
         }
-            //点击录像按键
+        //点击录像按键
         else if(REALTIME_RECOE &&video_flgs==1 )
         {
-            if(round_pth==0)
+            pthread_mutex_lock(&mutex_round_pth);
+            if(round_flgs==0)
             {
                 en0_clear();
-                round_pth=1;
+                round_flgs=1;
                 printf("进入录像\n");
-                //显示录制标志
-                pthread_create(&thread_round1, NULL,lcd_round1,NULL);
                 //开始录像
+            pthread_create(&thread_record_video, NULL,Record_Video,NULL);
+                //显示录制标志
+            pthread_create(&thread_round1, NULL,lcd_round1,NULL);
             }
-            else if(round_pth==1)
-            {
-                pthread_join(thread_round1,NULL);
-                     round_pth=0;
-            }
+            pthread_mutex_unlock(&mutex_round_pth);
+            // else if(round_pth1==1)
+            // {
+            //     printf("222\n");
+            //     pthread_join(thread_round1,NULL);
+            //          round_pth=0;
+            // }
         }
 
         else if(GUIDELINE &&video_flgs==1)
@@ -250,9 +281,73 @@ void * Realtime_video_key(void * a)
             {
                 pthread_join(thread_line,NULL);
                 line_pth=0;
-
             }
         }   
+        else if(REALTIME_IMC &&video_flgs==1 )
+        {
+             en0_clear();
+              open_mic();
+        }
     } 
+
+}
+
+void *Record_Video(void *a)
+{
+    printf("开始录像\n");
+        struct stat statbuf;
+//创建保存录像的文件夹，只有一个
+    if(-1== stat(DIR_SAVE_VIDEO_PATH,&statbuf))
+    {
+        mkdir(DIR_SAVE_VIDEO_PATH,0777);
+    }
+ 
+     char * record_video_buf=( char *)calloc(1,IMAGE_HEIGHT*IMAGE_WIDTH*2);
+    if(record_video_buf==NULL)
+        {
+            printf("===================堆空间创建失败===============\n");
+                return NULL;                
+        }
+        //处理成图片
+     char          filename_path [70]      = {0};
+     char          filetime[50]            = {0};
+    
+    //找到路径
+     memcpy(filename_path,DIR_SAVE_VIDEO_PATH,strlen(DIR_SAVE_VIDEO_PATH));
+     strcat(filename_path,"/");
+     //获得时间戳
+     File_time(filetime);
+    //获得文件夹名字
+    sprintf(filename_path+strlen(filename_path),"recoreder-%s-Car/",filetime);
+    //创建文件夹
+    mkdir(filename_path,0777);
+    
+    char  *filename =calloc(1,150*sizeof(char));
+    for(int i=0;;i++)
+    {
+        printf("开始获取一帧图片\n");
+        sem_wait(&sem_record_video_pth);
+        record_video_pth=1;
+        memcpy(record_video_buf,p_buffer[read_index],IMAGE_WIDTH*IMAGE_HEIGHT*2);        
+        sem_post(&sem_record_video_pth);
+       
+        //获取时间戳,要么添加成结构体要么不加时间戳
+        //文件路径加名字
+        sprintf(filename,"%s-car%d.jpg",filename_path,i);   
+        //转成图片 （yuyv数据转成图片）
+        write_JPEG_file (filename, 80,record_video_buf);
+        printf("录像获得一帧\n");
+        record_video_pth=0;
+            //重复点击
+        if(REALTIME_RECOE&&video_flgs==1&&round_flgs==1)   
+        {
+            sem_post(&sem_record_video_flgs);
+            free(filename);
+           pthread_exit(NULL); 
+        }
+    }
+
+
+        
 
 }

@@ -23,24 +23,31 @@ void Main_Interface_init()
 
  Interface=1;
 video_flgs=0;
-round_flgs=0;       
 round_pth=0;       
+round_flgs=0;       
 line_pth=0;
 set_flgs=0;
-Keyboard_flgs=0;
-Keyboard_return=1; //键盘已退出
+mic_flgs=0;
+recorder_flgs=0;
+new_Camera_frame_flgs=0;
+record_video_pth=0;
+
+recorder_frame=0;
+
+Keyboard_flgs=-1;
 
 memset(keyboard_out,0,sizeof(keyboard_out));
-memset(admin,0,sizeof(admin));
+memset(phone_number,0,sizeof(phone_number));
 memset(password,0,sizeof(password));
 
 
 write_buf=NULL;
 
  //初始化信号量
- sem_init(&sem, 0, 0);
- sem_init(&sem1, 0, 0);
-  sem_init(&sem2, 0, 0);
+ sem_init(&sem_record_video_pth, 0, 0);
+ sem_init(&sem_record_video_flgs, 0, 0);
+ sem_init(&sem_recorder_complete, 0, 0);
+  sem_init(&sem_Realtime_video, 0, 0);
  //减信号量
     // sem_wait( &sem);
  //加信号量
@@ -51,7 +58,8 @@ write_buf=NULL;
 void Pthread_Mutex_Init()
 {
    //初始化互斥锁
-    if(0!=pthread_mutex_init(&mutex, NULL))
+   
+    if(0!=pthread_mutex_init(&mutex_round_pth, NULL))
     {
       fprintf(stderr,"初始化互斥锁失败%s",errno);
       exit(1);
@@ -90,11 +98,14 @@ void Pthread_Init()
      //创建线程
     pthread_create(&thread_ent0, NULL,child_ent0,NULL);//触控，永远打开，除非系统退出，不需要exit
     pthread_create(&thread_video, NULL,child_video,NULL);//打开摄像头，永远打开
+    pthread_create(&thread_recorder, NULL,child_recorder,NULL);//打开记录仪
 }
 void Pthread_Join()
 {
   pthread_join(thread_ent0, NULL);
   pthread_join(thread_video, NULL);
+  printf("等待记录仪\n");
+  pthread_join(thread_recorder, NULL);
 }
 
 
@@ -108,12 +119,16 @@ void Realtime_Video() //打开实时画面
         
 //将摄像头采集的图片放在buffer_mp里
   pthread_create(&thread_lcd_buf, NULL,child_Realtime_buf,NULL);
-
 //将处理过的图片到开发板
   pthread_create(&thread_lcd_video, NULL,child_Realtime_video,NULL);
   //影像按键检测线程,要恢复状态
   pthread_create(&thread_video_key, NULL,Realtime_video_key,NULL);
+  printf("round_pth1=%d\n",round_flgs);
+  if(round_flgs==1)
+  {
+    pthread_create(&thread_round1, NULL,lcd_round1,NULL);
 
+  }
   //堵塞
   pthread_join(thread_video_key, NULL);
   printf("1\n");
@@ -123,8 +138,6 @@ void Realtime_Video() //打开实时画面
   printf("1\n");
   en0_clear();
   //挺多共用的出来再关    
-  free(buffer_mp);
-  read_JPEG_file (CAT_STAT_IMAGE, mp);
   video_flgs=0;//切换到lcd摄像
   //添加退出按钮
 }
@@ -138,6 +151,9 @@ void Shut_Down()
   for(int i=0;i<HEIGHT;i++)
   for(int j=0;j<WIDTH;j++)
   mp[j+i*WIDTH]=0x00000000;
+
+  close(socket_fd);
+  close((int)lcd_fp);
   munmap(mp,800*480*4);
   exit(0);
 }
@@ -170,47 +186,82 @@ int main()
 //初始化线程
   Pthread_Init();
 
-
-
+// showfont(200,200,100,0xff0000,"小鸡");
   //一个按键一个状态，所以可以阻塞
+
+
+
+
   for(;;)
   {   
       if( OPEN_FILM&&Interface==1&&video_flgs==0)//在主界面点击此坐标有效,进入倒车影像界面
           {
             //打开显示屏实时画面
                 Realtime_Video();
+              read_JPEG_file (CAT_STAT_IMAGE, mp);
 
           } //
-          else if(MAIN_SETTINGS &&Interface==1&&set_flgs==0)//进入设置
+          else if(MAIN_SETTINGS &&Interface==1)//进入设置
           {
+            set_flgs=1;
             en0_clear();
             printf("进入设置\n");
             Settings();
             en0_clear();
             //退出时清理坐标再清空标志位
-             set_flgs=0;
             Interface=1;
-            
+            set_flgs=0;
+            read_JPEG_file (CAT_STAT_IMAGE, mp);
           }
-    
+          else if(MAIN_MIC &&Interface==1)  //点击麦克风
+          {
+            en0_clear();
+            open_mic();
+          }
+          //之后改成文件夹，点开后可选择看记录仪或录像，现在直接播放行车记录仪
+          else if(MAIN_RECORD_VIDEO_SAVE &&Interface==1&&recorder_flgs==0)  //点击行车记录仪
+          {               
+             sem_wait(&sem_recorder_complete);
+            //确认两个线程都进入记录仪
+             recorder_flgs=1;
+             printf("开始播放记录仪\n");
+             pthread_create(&thread_image_jpg, NULL,recorder_image_jpg,NULL);
+             sem_post(&sem_recorder_complete);
+              // 生成视频完毕，可以播放
+          }
+          else if(MAIN_DIR &&Interface==1&&recorder_flgs==0)  //点击文件夹，要有给文件夹上锁功能
+          {
+              //显示文件夹，lvgl
 
-          //设置
-          //语音输入
-          //
 
+          }
+          else if( MAIN_SRCEENSHOT&&Interface==1&&recorder_flgs==0)  //音乐lvgl
+          {
+
+
+          }
+          else if( MAIN_RECORD_AWA&&Interface==1&&recorder_flgs==0)  //点击录音，鸡肋
+          {
+
+
+          }
+            
+          else if( MAIN_LOCK_SCREEN&&Interface==1&&recorder_flgs==0)  //锁屏
+          {
+
+
+          }
               Interface=1;//退出转到主界面
   }
   
 }
 
 //要做的：
-//自动创建文件夹保存并覆盖，限定200帧，
 //添加手动录像，截图，放在不同位置
 //且画线缺失，保存图片要链表，且要点击后播放,还没释放内存，
 //将动态麦克风贴上去
 /*
 录像:缓冲区有用吗？没用，每一帧都保存？不要。采用lcd屏一样的思路。
-回放:可以直接创建一个两百个buff数组，等退出lcd摄像再点击生成，那还在录像怎么办？傻屌关机前保存啊。*/
 //拓展功能，如截图
 //语音识别，文件夹页面
 //看笔记
