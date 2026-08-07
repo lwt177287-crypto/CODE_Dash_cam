@@ -26,7 +26,7 @@ void *child_recorder(void * a )
     {
         for(recorder_frame=0;recorder_frame<RECORDER_FRAME;recorder_frame)
          {
-            if( MAIN_RECORD_VIDEO_SAVE&&Interface==1&&recorder_flgs==0) //打开记录仪
+            if( MAIN_RECORD_VIDEO_SAVE&&s_v_c_main.Interface==1&&s_recorder.recorder_flgs==0) //打开记录仪
             {
                 //这一步要确定recorder线程先到达，因为合成影像会使用旧空间
                 //主界面点行车记录仪，传信号过主界面行车记录仪按钮
@@ -39,23 +39,23 @@ void *child_recorder(void * a )
                 
             }
             // 如果点击关机，先保存再结束
-            else if(SET_SHUTDOWN&&set_flgs==1&&recorder_flgs==0)   //关机
+            else if(SET_SHUTDOWN&&s_v_c_main.set_flgs==1&&s_recorder.recorder_flgs==0)   //关机
             {
                 printf("保存录像\n");
-                  recorder_flgs=1;
+                  s_recorder.recorder_flgs=1;
                 pthread_t  thread_image_jpg;        
               pthread_create(&thread_image_jpg, NULL,recorder_image_jpg,NULL);//触控，永远打开，除非系统退出，不需要exit
                 pthread_join(thread_image_jpg,NULL);
                 pthread_exit(NULL);
             }
-             else if(new_Camera_frame_flgs==1)
+             else if(s_recorder.new_Camera_frame_flgs==1)
              { 
                 // printf("frame=%d\n",recorder_frame);
                 //获取摄像头采集的yuyv
                 pthread_mutex_lock(&mutex_reading_flgs);
                 memcpy(recorder_read_buf+(recorder_frame*IMAGE_HEIGHT*IMAGE_WIDTH*2),
                 p_buffer[read_index],IMAGE_HEIGHT*IMAGE_WIDTH*2);
-                new_Camera_frame_flgs=0;    //拿取新帧完毕
+                s_recorder.new_Camera_frame_flgs=0;    //拿取新帧完毕
                 pthread_mutex_unlock(&mutex_reading_flgs);
                 //用完再++，当前位置是旧数据
                 recorder_frame++;
@@ -82,7 +82,7 @@ void * recorder_image_jpg(void *a)
     int stat_frame;
     int end_frame=0;
     //如果不是关机
-    if(set_flgs!=1)
+    if(s_v_c_main.set_flgs!=1)
     {
         printf("重新分配内存\n");
         recorder_read_buf=calloc(RECORDER_FRAME,IMAGE_HEIGHT*IMAGE_WIDTH*2);
@@ -138,7 +138,7 @@ void * recorder_image_jpg(void *a)
         break;
         }
     }
-    recorder_flgs=0;
+   s_recorder.recorder_flgs=0;
     printf("完毕\n");
     free(recorder_image_buf);
     free(filename);

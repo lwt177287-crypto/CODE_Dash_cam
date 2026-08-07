@@ -27,7 +27,7 @@ struct sockaddr_in dest_addr;
   char recvbuf[4096]={0};
     char sendbuf[4096]={0};
     char info[1024];
-    // sprintf(info,"account=C29437780&password=85908d5d3fccc78522f251c89625b9ec&mobile=%s&content=您的验证码是：%d。请不要把验证码泄露给其他人。",phone_number,a);
+    // sprintf(info,"account=C29437780&s_keyboard.password=85908d5d3fccc78522f251c89625b9ec&mobile=%s&content=您的验证码是：%d。请不要把验证码泄露给其他人。",s_keyboard.phone_number,a);
   sprintf(sendbuf,
         "POST /sms/Submit.json HTTP/1.1\r\n"
         "Host:api.ihuyi.com\r\n"

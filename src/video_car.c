@@ -218,12 +218,12 @@ mainloop()
             pthread_mutex_lock(&mutex_reading_flgs);
             p_buffer[buf_i]=buffers[buf.index].start;
              read_index=buf_i; 
-            new_Camera_frame_flgs=1;
+            s_recorder.new_Camera_frame_flgs=1;
           pthread_mutex_unlock(&mutex_reading_flgs);
 
          
                //点击关机
-            if(SET_SHUTDOWN&&set_flgs==1)
+            if(SET_SHUTDOWN&&s_v_c_main.set_flgs==1)
             {
                 //等待行车记录仪备份
                     sem_post(&sem_recorder_complete);

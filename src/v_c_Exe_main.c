@@ -20,25 +20,26 @@ void Main_Interface_init()
 
  read_JPEG_file (CAT_STAT_IMAGE, mp);
    printf("1\n");
+s_v_c_main.Interface=1;
+s_v_c_main.video_flgs=0;
 
- Interface=1;
-video_flgs=0;
-round_pth=0;       
-round_flgs=0;       
-line_pth=0;
-set_flgs=0;
-mic_flgs=0;
-recorder_flgs=0;
-new_Camera_frame_flgs=0;
-record_video_pth=0;
+s_realtime_video.round_pth=0;       
+s_realtime_video.round_flgs=0;       
+s_realtime_video.line_pth=0;
+s_realtime_video.record_video_pth=0;
+
+s_v_c_main.set_flgs=0;
+s_v_c_main.mic_flgs=0;
+s_recorder.recorder_flgs=0;
+s_recorder.new_Camera_frame_flgs=0;
 
 recorder_frame=0;
 
-Keyboard_flgs=-1;
+s_keyboard.Keyboard_flgs=-1;
 
-memset(keyboard_out,0,sizeof(keyboard_out));
-memset(phone_number,0,sizeof(phone_number));
-memset(password,0,sizeof(password));
+memset(s_keyboard.keyboard_out,0,sizeof(s_keyboard.keyboard_out));
+memset(s_keyboard.phone_number,0,sizeof(s_keyboard.phone_number));
+memset(s_keyboard.password,0,sizeof(s_keyboard.password));
 
 
 write_buf=NULL;
@@ -112,8 +113,8 @@ void Pthread_Join()
 
 void Realtime_Video() //打开实时画面
 {
-  Interface=0;//切换界面，主界面标志位关闭
-  video_flgs=1;//切换到lcd摄像
+  s_v_c_main.Interface=0;//切换界面，主界面标志位关闭
+  s_v_c_main.video_flgs=1;//切换到lcd摄像
   printf("用户点击打开相机\n");
   read_JPEG_file (TRALTIME_IMAGE,lcd_fp);
         
@@ -123,8 +124,8 @@ void Realtime_Video() //打开实时画面
   pthread_create(&thread_lcd_video, NULL,child_Realtime_video,NULL);
   //影像按键检测线程,要恢复状态
   pthread_create(&thread_video_key, NULL,Realtime_video_key,NULL);
-  printf("round_pth1=%d\n",round_flgs);
-  if(round_flgs==1)
+  printf("round_pth1=%d\n",s_realtime_video.round_flgs);
+  if(s_realtime_video.round_flgs==1)
   {
     pthread_create(&thread_round1, NULL,lcd_round1,NULL);
 
@@ -138,7 +139,7 @@ void Realtime_Video() //打开实时画面
   printf("1\n");
   en0_clear();
   //挺多共用的出来再关    
-  video_flgs=0;//切换到lcd摄像
+  s_v_c_main.video_flgs=0;//退出lcd摄像
   //添加退出按钮
 }
 
@@ -194,64 +195,64 @@ int main()
 
   for(;;)
   {   
-      if( OPEN_FILM&&Interface==1&&video_flgs==0)//在主界面点击此坐标有效,进入倒车影像界面
+      if( OPEN_FILM&&s_v_c_main.Interface==1&&s_v_c_main.video_flgs==0)//在主界面点击此坐标有效,进入倒车影像界面
           {
             //打开显示屏实时画面
                 Realtime_Video();
               read_JPEG_file (CAT_STAT_IMAGE, mp);
 
           } //
-          else if(MAIN_SETTINGS &&Interface==1)//进入设置
+          else if(MAIN_SETTINGS &&s_v_c_main.Interface==1)//进入设置
           {
-            set_flgs=1;
+            s_v_c_main.set_flgs=1;
             en0_clear();
             printf("进入设置\n");
             Settings();
             en0_clear();
             //退出时清理坐标再清空标志位
-            Interface=1;
-            set_flgs=0;
+            s_v_c_main.Interface=1;
+            s_v_c_main.set_flgs=0;
             read_JPEG_file (CAT_STAT_IMAGE, mp);
           }
-          else if(MAIN_MIC &&Interface==1)  //点击麦克风
+          else if(MAIN_MIC &&s_v_c_main.Interface==1)  //点击麦克风
           {
             en0_clear();
             open_mic();
           }
           //之后改成文件夹，点开后可选择看记录仪或录像，现在直接播放行车记录仪
-          else if(MAIN_RECORD_VIDEO_SAVE &&Interface==1&&recorder_flgs==0)  //点击行车记录仪
+          else if(MAIN_RECORD_VIDEO_SAVE &&s_v_c_main.Interface==1&&s_recorder.recorder_flgs==0)  //点击行车记录仪
           {               
              sem_wait(&sem_recorder_complete);
             //确认两个线程都进入记录仪
-             recorder_flgs=1;
+             s_recorder.recorder_flgs=1;
              printf("开始播放记录仪\n");
              pthread_create(&thread_image_jpg, NULL,recorder_image_jpg,NULL);
              sem_post(&sem_recorder_complete);
               // 生成视频完毕，可以播放
           }
-          else if(MAIN_DIR &&Interface==1&&recorder_flgs==0)  //点击文件夹，要有给文件夹上锁功能
+          else if(MAIN_DIR &&s_v_c_main.Interface==1&&s_recorder.recorder_flgs==0)  //点击文件夹，要有给文件夹上锁功能
           {
               //显示文件夹，lvgl
 
 
           }
-          else if( MAIN_SRCEENSHOT&&Interface==1&&recorder_flgs==0)  //音乐lvgl
+          else if( MAIN_SRCEENSHOT&&s_v_c_main.Interface==1&&s_recorder.recorder_flgs==0)  //音乐lvgl
           {
 
 
           }
-          else if( MAIN_RECORD_AWA&&Interface==1&&recorder_flgs==0)  //点击录音，鸡肋
+          else if( MAIN_RECORD_AWA&&s_v_c_main.Interface==1&&s_recorder.recorder_flgs==0)  //点击录音，鸡肋
           {
 
 
           }
             
-          else if( MAIN_LOCK_SCREEN&&Interface==1&&recorder_flgs==0)  //锁屏
+          else if( MAIN_LOCK_SCREEN&&s_v_c_main.Interface==1&&s_recorder.recorder_flgs==0)  //锁屏
           {
 
 
           }
-              Interface=1;//退出转到主界面
+              s_v_c_main.Interface=1;//退出转到主界面
   }
   
 }

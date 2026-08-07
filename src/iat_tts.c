@@ -40,16 +40,16 @@ char a='0';
 
 void open_mic()
 {
-  if(mic_flgs==0)
+  if(s_v_c_main.mic_flgs==0)
   {
-    printf("-----mic_flgs=%d\n",mic_flgs);
+    printf("-----s_v_c_main.mic_flgs=%d\n",s_v_c_main.mic_flgs);
       printf("打开麦克风111\n");
       if( 0==socket_c())
-          mic_flgs=1;
+          s_v_c_main.mic_flgs=1;
       else 
       printf("打开失败,通信关闭\n");
     }
-    else if(mic_flgs==1) 
+    else if(s_v_c_main.mic_flgs==1) 
     {
           char a[10]={0};
           recv(socket_fd,a,10,MSG_DONTWAIT);

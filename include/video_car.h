@@ -1,5 +1,6 @@
 #ifndef VIDEO_CAR_EXE_H  // 1. 检查是否未定义 
 #define VIDEO_CAR_EXE_H // 2. 如果未定义，则定义它（通常用大写文件名）
+
 #include <arpa/inet.h>
 
 
@@ -34,20 +35,21 @@
  #include <semaphore.h>
   #include <semaphore.h>
 
+  #include <errno.h>    
+
 #include <sys/socket.h>
 #include <netinet/ip.h>
 #include <netinet/in.h>
 
-
-
-
+//目录
+// #include <dirent.h>
 
 
 //主界面按钮
 #define OPEN_FILM en0_x>=450&&en0_x<619&&en0_y>70&&en0_y<237      //打开摄像机
  
-#define MAIN_RECORD_VIDEO en0_x>321&&en0_x<391&&en0_y>121&&en0_y<180    //开启录像
-#define MAIN_DIR en0_x>670&&en0_x<740&&en0_y>121&&en0_y<180    //打开视频、录音文件夹
+#define    MAIN_RECORD_VIDEO_SAVE  en0_x>321&&en0_x<391&&en0_y>121&&en0_y<180   //保存记录仪
+#define   MAIN_DIR  en0_x>670&&en0_x<740&&en0_y>121&&en0_y<180  //打开视频、录音文件夹
 
 #define MAIN_RECORD_AWA en0_x>280&&en0_x<340&&en0_y>320&&en0_y<385    //打开录音
 #define MAIN_SRCEENSHOT en0_x>375&&en0_x<445&&en0_y>320&&en0_y<385    //音乐
@@ -57,15 +59,15 @@
 
 
 //摄像显示页面按钮
-#define REALTIME_SPEECH     en0_x>17&&en0_x<90&&en0_y>35&&en0_y<110     //打开语音
-#define REALTIME_RECOE     en0_x>17&&en0_x<90&&en0_y>144&&en0_y<215     //打开录像
-#define REALTIME_AVIGATION     en0_x>17&&en0_x<90&&en0_y>250&&en0_y<316     //打开导航
-#define EIXT_FILM            en0_x>17&&en0_x<90&&en0_y>360&&en0_y<424     //关闭摄像机
+#define REALTIME_SPEECH     en0_x>23&&en0_x<70&&en0_y>98&&en0_y<133     //打开导航
+#define REALTIME_RECOE      en0_x>23&&en0_x<70&&en0_y>170&&en0_y<204     //打开录像
+#define REALTIME_IMC        en0_x>23&&en0_x<70&&en0_y>247&&en0_y<283     //打开语音
+#define EIXT_FILM             en0_x>23&&en0_x<70&&en0_y>317&&en0_y<357     //关闭摄像机
 
-#define GUIDELINE                en0_x>700&&en0_x<780&&en0_y>40&&en0_y<106    //打开辅助线
-#define REALTIME_VOLUME_ADD        en0_x>700&&en0_x<780&&en0_y>139&&en0_y<209    //加大音量
-#define REALTIME_VOLUME_RM         en0_x>700&&en0_x<780&&en0_y>251&&en0_y<325    //减少音量
-#define REALTIME_RETURN            en0_x>700&&en0_x<780&&en0_y>361&&en0_y<425    //返回
+#define GUIDELINE                en0_x>725&&en0_x<776&&en0_y>98&&en0_y<133    //打开辅助线
+#define REALTIME_VOLUME_ADD         en0_x>725&&en0_x<776&&en0_y>170&&en0_y<204   //加大音量
+#define REALTIME_VOLUME_RM          en0_x>725&&en0_x<776&&en0_y>247&&en0_y<283   //减少音量
+#define REALTIME_RETURN            en0_x>725&&en0_x<776&&en0_y>317&&en0_y<357    //返回
  
  
 
@@ -107,13 +109,14 @@
 
 
 //登录界面按钮
-#define LOGIN_USERNAME     en0_x>255&&en0_x<347&&en0_y>163&&en0_y<193     //用户名
-#define LOGIN_PASSWORD     en0_x>255&&en0_x<347&&en0_y>228&&en0_y<258     //密码
-#define LOGIN_BUTTON     en0_x>255&&en0_x<545&&en0_y>296&&en0_y<330    //登录按钮
-  #define LOGIN_FORGOT_PASSWORD     en0_x>505&&en0_x<547&&en0_y>270&&en0_y<280     //忘记密码
-#define LOGIN_SMS     en0_x>252&&en0_x<302&&en0_y>270&&en0_y<280     //短信验证 
+#define LOGIN_USERNAME     en0_x>255&&en0_x<347&&en0_y>163&&en0_y<193     //手机号
+#define LOGIN_PASSWORD     en0_x>255&&en0_x<347&&en0_y>228&&en0_y<258     //密码、验证码
+#define LOGIN_YES      en0_x>255&&en0_x<545&&en0_y>296&&en0_y<330    //登录按钮
+  #define LOGIN_FORGOT_PASSWORD     en0_x>505&&en0_x<547&&en0_y>270&&en0_y<280  //忘记密码
+#define LOGIN_SMS     en0_x>252&&en0_x<302&&en0_y>270&&en0_y<280     //短信登录 
 #define LOGIN_IFICATION      en0_x>411&&en0_x<453&&en0_y>349&&en0_y<362     // 注册
 #define LOGIN_RETURN      en0_x>368&&en0_x<423&&en0_y>383&&en0_y<410     // 退出
+#define LOGIN_GET_SMS      en0_x>468&&en0_x<550&&en0_y>233&&en0_y<263     // 获取验证码
 
 
 
@@ -178,13 +181,20 @@
 #define  IMAGE_WIDTH  640
 #define  IMAGE_HEIGHT  480
 
+//行车记录仪录制时长（帧数）
+#define RECORDER_FRAME 200    
 
-        
 #define CAT_STAT_IMAGE "/root/shiyan/CODE/Main.jpg"
 #define TRALTIME_IMAGE "/root/shiyan/CODE/Realtime_video.jpg"
 #define SETTINGS_IMAGE "/root/shiyan/CODE/caidan.jpg"
 #define SETTINGS_LOGIN "/root/shiyan/CODE/login.jpg"
+#define SETTINGS_SMS_LOGIN "/root/shiyan/CODE/yzm_login.jpg"
 #define KEYBOARD_IMAGE  "/root/shiyan/CODE/stdout.jpg"
+
+
+
+#define DIR_SAVE_VIDEO_PATH  "/root/shiyan/CODE/Video"
+#define DIR_RECORDER_PATH "/root/shiyan/CODE/Recorder"
 
 
 // 开发板宽高
@@ -211,38 +221,68 @@
 #define SMS_IP  "118.31.68.22"
 
 
-int video_flgs;//打开倒车影像状态
-int round_flgs;//录制状态
-int set_flgs;      //设置状态
-int line_pth; //辅助线线的状态
-int round_pth; //录制状态
-int Interface; //主界面标志位
-int login_flgs; //登录页面标志位
-int login_pth; //登录状态
-int Keyboard_flgs; //键盘状态
-int Keyboard_return; //键盘是否退出
-char keyboard_out[100]; //键盘输出
-char admin[50]; //用户名
-char password[20]; //密码
+struct str_v_c_main
+{
+  int Interface; //主界面标志位
+  int video_flgs;//打开倒车影像状态
+  int set_flgs; //设置状态
+  int mic_flgs; //是否开启麦克风
+};
 
- sem_t sem; //信号量
- sem_t sem1; //信号量
- sem_t sem2; //信号量
+
+
+struct str_realtime_video
+{
+  int record_video_pth;//录制标志状态
+  int round_pth;//录制标志状态
+  int line_pth; //辅助线线的状态
+  int round_flgs; //录制开启状态
+};
+
+struct str_recorder
+{
+int recorder_flgs;       //查看记录仪标志位
+  int new_Camera_frame_flgs; //摄像头有没有新帧状态
+};
+
+struct str_keyboard
+{
+  int Keyboard_flgs; //键盘状态
+char keyboard_out[100]; //键盘输出
+char phone_number[12]; //手机号
+char password[20]; //密码
+char sms_input[5]; //验证码
+};
+
+
+ sem_t sem_record_video_flgs; //信号量
+ sem_t sem_record_video_pth; //信号量
+ sem_t sem_recorder_complete; //信号量
+ sem_t sem_Realtime_video; //信号量
  sem_t sem3; //信号量
-pthread_mutex_t  mutex;  //互斥锁,buffermp的
+pthread_mutex_t  mutex_round_pth;  //录制互斥锁
 pthread_mutex_t  mutex_round_flgs;  //互斥锁
 pthread_mutex_t  mutex_en0_ABS_flgs;  //互斥锁
 pthread_mutex_t  mutex_reading_flgs;  //互斥锁  表示摄像头的这块缓冲正在写
 pthread_mutex_t  mutex_wr_buf_mp;  //互斥锁  表示缓冲和开发板正在读写
 
+//识别状态
+struct str_v_c_main s_v_c_main;
+struct str_realtime_video s_realtime_video;
+struct str_recorder s_recorder;
+struct str_keyboard s_keyboard;
+
+ 
+
 unsigned int buf_i;   //摄像头正在映射的那块内存号
  unsigned int *mp;  //开发板屏幕
-unsigned int * buffer_mp;//处理图片的缓冲区
 unsigned int read_index;  //读到摄像头哪个缓冲的下标
-unsigned int * write_buf; //缓冲区写完
+char *write_buf; //缓冲区写完
 unsigned int * read_buf;  //开发板读完
-unsigned int * (p_buffer[4]);  //开发板读完
-
+char* (p_buffer[4]);  //开发板读完
+int recorder_frame;       //记录仪获取新帧的位置
+//跟麦克风传递状态的套接字
+int socket_fd;
 
 //摄像头的信息
 struct buffer {
@@ -251,26 +291,62 @@ struct buffer {
 };
 extern struct buffer *         buffers;
 
+//登录页面枚举
+typedef enum
+{
+    LOGIN_STATE_PASSWORD,
+    LOGIN_STATE_INPUT_USER,
+    LOGIN_STATE_INPUT_PASSWORD,
+    LOGIN_STATE_IN_SMS,    //进入验证码模式
+    LOGIN_STATE_ISTRATION,  //注册
+    LOGIN_STATE_FORGOT_PASSWORD,//忘记密码
+    LOGIN_STATE_YES,    //确认
+    KEY_BOARD_STATE_TURETN, //键盘退出
+    LOGIN_STATE_EXIT,
+    
+    LOGIN_STATE_IN_PASSWORD,
+    LOGIN_STATE_SMS,      //短信登录模式
+    LOGIN_STATE_GET_SMS,  //获取验证码  
+
+}LOGIN_STATE;
+
+typedef enum
+{
+  SET_STATE_SET,
+  SET_STATE_LOGIN,
+  SET_STATE_WIFI,
+  SET_STATE_LANGUAGE ,
+  SET_STATE_SYSTEM_INFO,
+  SET_STATE_SHUTDOWN,
+  SET_STATE_RETURN,
+             
+}SETTINGS;
+
 //坐标
 extern int en0_x; 
 extern int en0_y;
 
 unsigned int * lcd_fp;          //用来复位
-extern char * car_video[200];   //行车记录仪回放
-//进程
+//线程
  pthread_t  thread_ent0;        
  pthread_t  thread_video;
+ pthread_t  thread_recorder;
 pthread_t  thread_lcd_video;
 pthread_t  thread_round1;
 pthread_t  thread_video_key;
   pthread_t  thread_lcd_buf;
   pthread_t  thread_keyboard;
+  //生成记录仪gif
+  pthread_t  thread_image_jpg;        
 
 
 //接口
 int read_JPEG_file (char * filename, unsigned int *mp); //图片转数据
 void Abs_Cat( int event_fd, struct input_event * ev0);  //获取坐标
 
+//退出圆、辅助线线程
+void  lcd_round1_exit();
+void  lcd_line_exit();
 
 void Open_Video();      //打开摄像头
 // 在 video_car.c 的最顶部添加：
@@ -300,6 +376,9 @@ void * child_Realtime_video(void * a);
 void * lcd_round1(void * a);
 void * Realtime_video_key(void * a);
 void *child_keyboard(void * a);  //键盘线程
+void *child_recorder(void * a);
+void * recorder_image_jpg(void *a);
+void *Record_Video(void *a);
 
 
 void round1(); //显示录制圆点
@@ -316,17 +395,23 @@ void Shut_Down();
 //主界面功能
 void Settings();
 
-
 //设置界面功能
 void Login();
-void Login_In(); //输入账号
+void Key_Board_Open(); //打开键盘
 
-
+//显示字体
+void showfont(int x,int y,int size,int color,const char * font );
 
 //键盘
 char* Key_Board(unsigned int * keyboard_mp,char *p);
 //验证码
-void SMS();
+int  SMS(char * phone_number);
+void SMS_Login();
+
+
+//语音识别的信号
+int socket_c();
+void open_mic();
 
 void Mmap_Bmp(int lcd_fd,FILE * bmp_fd,unsigned int *mp); //另一个项目
 FILE * Open_Bmp(char * pathname);   //另一个项目的
