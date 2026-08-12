@@ -175,3 +175,70 @@ char* Key_Board(unsigned int * keyboard_mp,char *p)
     
     return p;
 }
+
+
+void Key_Board_Open() //打开键盘
+{
+      en0_clear();
+   if(-1== pthread_create(&thread_keyboard, NULL,child_keyboard,NULL))//打开键盘
+   {
+        fprintf(stderr,"create pthread_key_board error:%s",strerror(errno));
+        exit(-1);
+    }
+    pthread_detach(thread_keyboard);
+    s_keyboard.Keyboard_flgs=1;
+}
+
+//将键盘的值转到相应缓冲，并清空
+void Clear_Keyboard(char *num,char *keyboard_out,int size)
+{
+
+    if(keyboard_out==NULL||num==NULL||size==0)
+    {
+        printf("传入参数错误，无法将键盘的值传递\n");
+        return;
+    }
+     //将缓冲区清空防止覆盖
+    memset(num,0,strlen(num));
+    if(strlen(keyboard_out)==0)
+    {
+           
+        printf("键盘为空，没数据传入\n");
+        return ;
+    }
+
+    //size为num的总长度
+    if(strlen(keyboard_out)>size)
+    {
+        printf("过长,截取到前%d字符\n",size);
+        memcpy(num,keyboard_out,size);
+        num[size]='\0';
+        printf("%s\n",num);
+        //清空键盘
+        memset(keyboard_out,0,strlen(keyboard_out));
+    }
+    else if(strlen(keyboard_out)>0)
+    {
+        memcpy(num,keyboard_out,strlen(keyboard_out));
+        printf("%s\n",num);
+        memset(keyboard_out,0,strlen(keyboard_out));
+    }
+}
+
+//将上次未输入完的值拷贝到键盘中并继续输入，可以把打开键盘单拎出来降低耦合度
+void Input_Info(char *num,char * keyboard_out,int size)
+{
+    if(num==NULL||keyboard_out==NULL)
+    {
+        printf("传入参数错误，键盘无法读取存档\n");
+        return;
+    }
+    if(strlen(num)>=size)
+    {
+        printf("长度已到达上限!\n");
+    }
+    memcpy(keyboard_out,num,strlen(num));             //将没写完的密码接着写
+    Key_Board_Open(); //打开键盘
+}
+
+

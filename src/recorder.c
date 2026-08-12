@@ -5,6 +5,7 @@
 int xunhuan;
 
 //行车记录仪应该每200帧保存一次，具体为满200帧后另开线程处理转换成图片，记录仪线程清零且重新创建文件夹，关机前应自动保存
+//获得帧
 void *child_recorder(void * a )
 {
     struct stat statbuf;
@@ -26,20 +27,15 @@ void *child_recorder(void * a )
     {
         for(recorder_frame=0;recorder_frame<RECORDER_FRAME;recorder_frame)
          {
-            if( MAIN_RECORD_VIDEO_SAVE&&s_v_c_main.Interface==1&&s_recorder.recorder_flgs==0) //打开记录仪
+            if(s_recorder.recorder_create==1) //打开记录仪
             {
-                //这一步要确定recorder线程先到达，因为合成影像会使用旧空间
-                //主界面点行车记录仪，传信号过主界面行车记录仪按钮
-             sem_post(&sem_recorder_complete);
-                printf("保存录像\n");
-                //等待新的堆空间
+                pthread_create(&thread_image_jpg, NULL,recorder_image_jpg,NULL);
                 sem_wait(&sem_recorder_complete);
-                //确定主界面已经创建线程，线程会发送信号，再把标志位赋0，然后可以接着记录，一边合成
-
-                
+                s_recorder.recorder_create=0;
+                 
             }
             // 如果点击关机，先保存再结束
-            else if(SET_SHUTDOWN&&s_v_c_main.set_flgs==1&&s_recorder.recorder_flgs==0)   //关机
+            else if(s_settings.shutdown_flgs==1&&s_recorder.recorder_flgs==0)   //关机
             {
                 printf("保存录像\n");
                   s_recorder.recorder_flgs=1;
@@ -129,6 +125,7 @@ void * recorder_image_jpg(void *a)
         //获取时间戳,要么添加成结构体要么不加时间戳
         // File_time(filetime);
         sprintf(filename,"%s-car%d.jpg",filename_path,i);   
+        printf("%d\n",i);   
         //文件路径加名字
         //转成图片
         write_JPEG_file (filename, 80,(recorder_image_buf)+(stat_frame%200)*IMAGE_HEIGHT*IMAGE_WIDTH*2);
@@ -142,7 +139,6 @@ void * recorder_image_jpg(void *a)
     printf("完毕\n");
     free(recorder_image_buf);
     free(filename);
-    
 }
 
 

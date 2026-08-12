@@ -223,10 +223,10 @@ mainloop()
 
          
                //点击关机
-            if(SET_SHUTDOWN&&s_v_c_main.set_flgs==1)
+            if(s_settings.shutdown_flgs==1)
             {
                 //等待行车记录仪备份
-                    sem_post(&sem_recorder_complete);
+                    sem_wait(&sem_recorder_complete);
 
                     stop_capturing ();
                 

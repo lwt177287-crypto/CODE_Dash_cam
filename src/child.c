@@ -19,11 +19,10 @@
 //如果两个变量互斥建议创建枚举
 //做会员用结构体存储在文件里
 //焚诀：将每个退出都放在结构体变量中，不同结构体变量改变就代表不同结构体退出，与宏作用一样，且资源还可以统一释放
-
-
-pthread_t  thread_round1;
-pthread_t  thread_record_video;
-
+//焚诀:枚举+状态管理+不同线程同时触发的条件由统一的开关调节
+//应该要把每个按键封装成按钮，因为有些按下去会创建多条线程，改变很多状态，防止重复，
+//而按键有一个大状态位操控小状态位，一个按钮对应一个大状态位，一个线程对应一个小状态位
+//状态并非只有0或1，可以-1
 void *child_ent0(void * a)
 {
      int event_fd=open("/dev/input/event0",O_RDWR);
@@ -36,12 +35,12 @@ void *child_ent0(void * a)
      for(;;)
         {  
             //关机检测
-            if(SET_SHUTDOWN&&s_v_c_main.set_flgs==1) 
+            if(s_settings.shutdown_flgs==1) 
             {
-            printf("退出触摸\n");
-            free(ev0);
-            close(event_fd);
-            pthread_exit(NULL);
+                printf("退出触摸\n");
+                free(ev0);
+                close(event_fd);
+                pthread_exit(NULL);
             }
             else   //检测触控
             Abs_Cat(event_fd,ev0);
@@ -75,7 +74,6 @@ void *child_Realtime_buf(void * a)
           pthread_mutex_lock(&mutex_reading_flgs);
             if(s_realtime_video.round_flgs==1&&s_realtime_video.record_video_pth==0)
             {
-                printf("识别到录制开启\n");
                 sem_post(&sem_record_video_pth);
                 memcpy(write_buf,p_buffer[read_index],IMAGE_WIDTH*IMAGE_HEIGHT*2);        
                  sem_wait(&sem_record_video_pth);
@@ -108,15 +106,19 @@ void *child_Realtime_buf(void * a)
         if((EIXT_FILM|| REALTIME_RETURN)&&s_v_c_main.video_flgs==1)
         {
             printf("退出传输buffer\n");
-            sem_post(&sem_Realtime_video);
+            printf("------%d,%d\n",en0_x,en0_y);
             if(s_realtime_video.round_flgs==1)
             {
                 //等待圆圈线程关闭
+                printf("缓冲区等待圆圈关闭\n");
                 pthread_join(thread_round1,NULL);
             }
+            sem_post(&sem_Realtime_video);
             pthread_exit(NULL);
         }
-            pthread_mutex_unlock(&mutex_wr_buf_mp);
+        pthread_mutex_unlock(&mutex_wr_buf_mp);
+        // sem_post(&sem_key);
+            
             sem_post(&sem_Realtime_video);
     }  
 }
@@ -180,24 +182,23 @@ void  lcd_line_exit()
 //显示录制标志
 void * lcd_round1(void * a)
 {
-    printf("开启录制\n");
+    printf("进入录制标志线程\n");
     for(;;)
     {
-            //再次点击关闭
-        if(REALTIME_RECOE&&s_v_c_main.video_flgs==1&&s_realtime_video.round_flgs==1)   
+            //识别到关闭按钮
+        if( s_realtime_video.round_exit==1)   
         {
-            sem_wait(&sem_record_video_flgs);
-            en0_clear();
-            pthread_mutex_lock(&mutex_round_pth);
-            s_realtime_video.round_flgs=0;
-            pthread_mutex_unlock(&mutex_round_pth);
+            printf("s_realtime_video.round_exit=%d\n",s_realtime_video.round_exit);
+            s_realtime_video.round_exit=0;
+            printf("关闭圆圈标志\n");
             lcd_round1_exit();  
         } 
-            //关闭整个摄像机
+            //关闭整个摄像机,录制不用关
          if((EIXT_FILM|| REALTIME_RETURN)&&s_v_c_main.video_flgs==1&&s_realtime_video.round_flgs==1)   
         {
             lcd_round1_exit();
         }
+        //日常运行
         pthread_mutex_lock(&mutex_round_flgs);//上锁防止冲突
         s_realtime_video.round_pth=1;   //开启圆点
         pthread_mutex_unlock( &mutex_round_flgs);//解锁
@@ -207,7 +208,7 @@ void * lcd_round1(void * a)
     void  lcd_round1_exit()
 {
    
-    printf("退出录制！\n");
+    printf("退出录制标志线程！\n");
     pthread_exit(NULL); 
 } 
 
@@ -231,27 +232,27 @@ void * Realtime_video_key(void * a)
                 pthread_join(thread_line, NULL);
                 s_realtime_video.line_pth=0;
             }
-                // s_v_c_main.video_flgs=0;
                 pthread_exit(NULL);         
         }
         //点击录像按键
         else if(REALTIME_RECOE &&s_v_c_main.video_flgs==1 )
         {
-            pthread_mutex_lock(&mutex_round_pth);
-            if(s_realtime_video.round_flgs==0)
+
+                //检测到不在录制状态点击录制
+            if(s_realtime_video.record_stat==1)
             {
-                en0_clear();
-                s_realtime_video.round_flgs=1;
+                //收到
+                s_realtime_video.record_stat=0;
                 printf("进入录像\n");
                 //开始录像
             pthread_create(&thread_record_video, NULL,Record_Video,NULL);
                 //显示录制标志
             pthread_create(&thread_round1, NULL,lcd_round1,NULL);
-            }
-            pthread_mutex_unlock(&mutex_round_pth);
+            sem_post(&sem_record_video_flgs);
+                
+          }
        
         }
-
         else if(GUIDELINE &&s_v_c_main.video_flgs==1)
         {
             if(s_realtime_video.line_pth==0)
@@ -272,13 +273,34 @@ void * Realtime_video_key(void * a)
              en0_clear();
               open_mic();
         }
+ 
     } 
-
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void *Record_Video(void *a)
 {
-    printf("开始录像\n");
+    printf("进入录像线程\n");
         struct stat statbuf;
 //创建保存录像的文件夹，只有一个
     if(-1== stat(DIR_SAVE_VIDEO_PATH,&statbuf))
@@ -309,7 +331,6 @@ void *Record_Video(void *a)
     char  *filename =calloc(1,150*sizeof(char));
     for(int i=0;;i++)
     {
-        printf("开始获取一帧图片\n");
         sem_wait(&sem_record_video_pth);
         s_realtime_video.record_video_pth=1;
         memcpy(record_video_buf,p_buffer[read_index],IMAGE_WIDTH*IMAGE_HEIGHT*2);        
@@ -317,17 +338,21 @@ void *Record_Video(void *a)
        
         //获取时间戳,要么添加成结构体要么不加时间戳
         //文件路径加名字
-        sprintf(filename,"%s-car%d.jpg",filename_path,i);   
+        sprintf(filename,"%scar_video%d.jpg",filename_path,i);   
         //转成图片 （yuyv数据转成图片）
         write_JPEG_file (filename, 80,record_video_buf);
-        printf("录像获得一帧\n");
         s_realtime_video.record_video_pth=0;
-            //重复点击
-        if(REALTIME_RECOE&&s_v_c_main.video_flgs==1&&s_realtime_video.round_flgs==1)   
+        
+        //重复点击关闭
+        if(s_realtime_video.record_video_exit==1)   
         {
-            sem_post(&sem_record_video_flgs);
+            s_realtime_video.record_video_exit=0;
+          printf("关闭录像线程\n");
             free(filename);
            pthread_exit(NULL); 
         }
     }
 }
+
+//重复点击录像关闭
+//REALTIME_RECOE&&s_v_c_main.video_flgs==1&&s_realtime_video.round_flgs==1 

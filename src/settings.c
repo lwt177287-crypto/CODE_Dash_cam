@@ -52,9 +52,19 @@ void Settings()
              }    
             case SET_STATE_LOGIN:
                 {
-                    Login();
-                    set_state=SET_STATE_SET;
-                    break;
+                    if(s_admin.admin_login_flgs==0)
+                    {
+                        Login();
+                        set_state=SET_STATE_SET;
+                        printf("打印用户信息\n");
+                        printf("手机号：%s\n密码%s\n登录状态：%d\nvip:%d\n",s_admin.phone_number,s_admin.password,s_admin.admin_login_flgs,s_admin.vip);
+                    }
+                    else if(s_admin.admin_login_flgs==1)
+                    {
+                        Account_Info();
+                        set_state=SET_STATE_SET;
+                    }
+                   break;
                 }  
             case   SET_STATE_WIFI:
                 {
@@ -81,7 +91,6 @@ void Settings()
             case SET_STATE_RETURN:
             {
                 return ;
-
             }
       }
     }
