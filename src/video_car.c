@@ -1,5 +1,18 @@
 #include "video_car.h"
 
+
+static void init_device(void);
+static void start_capturing(void);
+static void mainloop(void);
+static void stop_capturing ();
+
+static void uninit_device ();
+
+static void close_device ();
+
+
+
+
 #define CLEAR(x) memset (&(x), 0, sizeof (x))
 static char *           dev_name        = "/dev/video7";
 static int              fd              = -1;

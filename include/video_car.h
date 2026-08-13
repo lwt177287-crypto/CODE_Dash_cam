@@ -108,7 +108,7 @@
 
 
 
-//登录界面按钮
+//两个登录界面按钮
 #define LOGIN_USERNAME     en0_x>255&&en0_x<347&&en0_y>163&&en0_y<193     //手机号
 #define LOGIN_PASSWORD     en0_x>255&&en0_x<347&&en0_y>228&&en0_y<258     //密码、验证码
 #define LOGIN_YES      en0_x>255&&en0_x<545&&en0_y>296&&en0_y<330    //登录按钮
@@ -118,13 +118,35 @@
 #define LOGIN_RETURN      en0_x>368&&en0_x<423&&en0_y>383&&en0_y<410     // 退出
 #define LOGIN_GET_SMS      en0_x>468&&en0_x<550&&en0_y>233&&en0_y<263     // 获取验证码
 
+//注册
+#define INSTRATTON_USERNAME     en0_x>245&&en0_x<336&&en0_y>123&&en0_y<157     //手机号
+#define INSTRATTON_GET_SMS      en0_x>490&&en0_x<551&&en0_y>187&&en0_y<222     // 获取验证码
+#define INSTRATTON_SMS          en0_x>245&&en0_x<336&&en0_y>187&&en0_y<222      //输入验证码
+#define INSTRATTON_PASSWORD     en0_x>245&&en0_x<336&&en0_y>252&&en0_y<281     //输入密码
+#define INSTRATTON_AGAIN_PASSWORD    en0_x>245&&en0_x<336&&en0_y>290&&en0_y<323     //密码、验证码
+#define INSTRATTON_YES          en0_x>245&&en0_x<557&&en0_y>339&&en0_y<372    //立即注册
+#define INSTRATTON_LOGIN        en0_x>351&&en0_x<447&&en0_y>390&&en0_y<406     // 返回登录
+#define INSTRATTON_RETURN       en0_x>364&&en0_x<424&&en0_y>420&&en0_y<442    // 退出
+
+//账户信息页面
+#define ACCOUNT_VIP_RECHARGE          en0_x>200&&en0_x<400&&en0_y>183&&en0_y<246    // 充值vip
+#define ACCOUNT_SAFE                  en0_x>200&&en0_x<400&&en0_y>253&&en0_y<317    // 账号安全
+#define ACCOUNT_DEVICE_MANAGEMENT     en0_x>200&&en0_x<400&&en0_y>323&&en0_y<391    // 设备管理
+#define ACCOUNT_EXIT                  en0_x>200&&en0_x<400&&en0_y>395&&en0_y<458    //账号退出
+#define ACCOUNT_RETURN                en0_x>750&&en0_x<781&&en0_y>18&&en0_y<50    //账号退出
 
 
-
-
-
-
-
+     
+enum Account_start
+{
+  ACCOUNT_START,  //选择
+  ACCOUNT_START_VIP_RECHARGE,//会员充值
+  ACCOUNT_START_SAFE, //账号安全
+  ACCOUNT_START_DEVICE_MANAGEMENT,  //管理设备账号
+  ACCOUNT_START_EXIT,   //退出账号
+  ACCOUNT_START_RETURN  //返回上一界面
+  
+};
 
 
  //键盘
@@ -188,10 +210,14 @@
 #define TRALTIME_IMAGE "/root/shiyan/CODE/Realtime_video.jpg"
 #define SETTINGS_IMAGE "/root/shiyan/CODE/caidan.jpg"
 #define SETTINGS_LOGIN "/root/shiyan/CODE/login.jpg"
+#define SETTINGS_ACCOUNT "/root/shiyan/CODE/account.jpg"
 #define SETTINGS_SMS_LOGIN "/root/shiyan/CODE/yzm_login.jpg"
+#define SETTINGS_ISTRATION "/root/shiyan/CODE/istration.jpg"
 #define KEYBOARD_IMAGE  "/root/shiyan/CODE/stdout.jpg"
 
 
+
+#define ADMIN_DATA_PATH "/root/shiyan/CODE/admin.txt"
 
 #define DIR_SAVE_VIDEO_PATH  "/root/shiyan/CODE/Video"
 #define DIR_RECORDER_PATH "/root/shiyan/CODE/Recorder"
@@ -233,33 +259,81 @@ struct str_v_c_main
 
 struct str_realtime_video
 {
-  int record_video_pth;//录制标志状态
-  int round_pth;//录制标志状态
-  int line_pth; //辅助线线的状态
-  int round_flgs; //录制开启状态
+  int record_video_pth;//录制获取帧状态
+  int record_video_flgs;//录制开启状态
+  int record_video_exit;//录制关闭
+  int round_pth;//录制标志闪烁状态
+  int round_flgs; //录制标志开启状态
+  int round_exit;//录制标志关闭
+  //当录像开启，两个小状态跟着开启，因为关闭条件有些不一样就没弄
+  int record_stat;//整个录像开启
+  
+  int line_pth; //辅助线的状态
+
 };
 
 struct str_recorder
 {
 int recorder_flgs;       //查看记录仪标志位
-  int new_Camera_frame_flgs; //摄像头有没有新帧状态
-};
+int new_Camera_frame_flgs; //摄像头有没有新帧状态
+int recorder_play;    //播放记录仪
+int recorder_create;    //创建记录仪回放
 
+};
+ 
+struct str_settings
+{
+  int shutdown_flgs;
+};
 struct str_keyboard
 {
-  int Keyboard_flgs; //键盘状态
-char keyboard_out[100]; //键盘输出
-char phone_number[12]; //手机号
-char password[20]; //密码
-char sms_input[5]; //验证码
+    int Keyboard_flgs; //键盘状态
+  char keyboard_out[100]; //键盘输出
+  char phone_number[12]; //手机号
+  char password[20]; //密码
+  char again_password[20]; //再次密码
+  char sms_input[5]; //验证码
 };
 
+//账号信息
+struct str_admin
+{
+  //账户信息
+char phone_number[12]; //手机号
+char password[20]; //密码
+  //会员
+  int vip;
+  //状态
+  int user_input;
+ int password_input;
+ int password_again_input;
+ int sms_input; //是否点击了验证码输入
+  //登录状态
+int admin_login_flgs;//此账号在此设备的登录状态，若为1点击登录弹出退出登录界面,升级VIP界面
+//系统发来的验证码
+ char sms_out[5];
+};
 
- sem_t sem_record_video_flgs; //信号量
- sem_t sem_record_video_pth; //信号量
- sem_t sem_recorder_complete; //信号量
+struct str_admin s_admin;
+
+//手机号+验证码
+ struct str_SMS_verification_code 
+ {
+   char phone_Number[12];
+  int sms_out;
+ };
+ struct str_SMS_verification_code s_SMS_verification_code;
+
+
+ sem_t sem_record_video_flgs; //线程创建成功发送信号给退出线程，若重复点击录像也不会段错误
+ sem_t sem_record_video_pth; //开启录像后，缓冲区获得新的yuyv数据告诉录像线程
+ sem_t sem_recorder_complete; //
  sem_t sem_Realtime_video; //信号量
- sem_t sem3; //信号量
+pthread_cond_t  sem_en0_ABS;
+ pthread_cond_t  sem_key;
+
+
+ 
 pthread_mutex_t  mutex_round_pth;  //录制互斥锁
 pthread_mutex_t  mutex_round_flgs;  //互斥锁
 pthread_mutex_t  mutex_en0_ABS_flgs;  //互斥锁
@@ -271,6 +345,7 @@ struct str_v_c_main s_v_c_main;
 struct str_realtime_video s_realtime_video;
 struct str_recorder s_recorder;
 struct str_keyboard s_keyboard;
+struct str_settings s_settings;
 
  
 
@@ -294,28 +369,49 @@ extern struct buffer *         buffers;
 //登录页面枚举
 typedef enum
 {
-    LOGIN_STATE_PASSWORD,
+    LOGIN_STATE_PASSWORD, //密码登录模式
     LOGIN_STATE_INPUT_USER,
     LOGIN_STATE_INPUT_PASSWORD,
     LOGIN_STATE_IN_SMS,    //进入验证码模式
     LOGIN_STATE_ISTRATION,  //注册
     LOGIN_STATE_FORGOT_PASSWORD,//忘记密码
     LOGIN_STATE_YES,    //确认
-    KEY_BOARD_STATE_TURETN, //键盘退出
-    LOGIN_STATE_EXIT,
+    LOGIN_KEY_BOARD_STATE_TURETN, //键盘退出
+    LOGIN_STATE_EXIT,   //退出
     
-    LOGIN_STATE_IN_PASSWORD,
+    LOGIN_STATE_IN_PASSWORD,//进入密码登录模式
     LOGIN_STATE_SMS,      //短信登录模式
     LOGIN_STATE_GET_SMS,  //获取验证码  
 
 }LOGIN_STATE;
 
+//登录注册枚举
+typedef enum
+{
+    INSTRATTON_STATE, //注册模式
+   INSTRATTON_STATE_INPUT_USER,//输入手机号
+   INSTRATTON_STATE_GET_SMS,  //获取验证码  
+   INSTRATTON_STATE_INPUT_SMS,//输入验证码
+   INSTRATTON_STATE_INPUT_PASSWORD,//输入密码
+    INSTRATTON_STATE_AGAIN_INPUT_PASSWORD,//再次输入密码
+   INSTRATTON_STATE_YES,    //确认
+   INSTRATTON_KEY_BOARD_STATE_TURETN, //键盘退出
+   INSTRATTON_STATE_EXIT,   //退出
+   INSTRATTON_STATE_LONIG,   //返回登录
+
+}E_LOGIN_INSTRATTON;
+
+
+
+
+
+//设置界面按钮
 typedef enum
 {
   SET_STATE_SET,
   SET_STATE_LOGIN,
   SET_STATE_WIFI,
-  SET_STATE_LANGUAGE ,
+  SET_STATE_LANGUAGE,
   SET_STATE_SYSTEM_INFO,
   SET_STATE_SHUTDOWN,
   SET_STATE_RETURN,
@@ -333,11 +429,15 @@ unsigned int * lcd_fp;          //用来复位
  pthread_t  thread_recorder;
 pthread_t  thread_lcd_video;
 pthread_t  thread_round1;
+pthread_t  thread_record_video;
 pthread_t  thread_video_key;
   pthread_t  thread_lcd_buf;
   pthread_t  thread_keyboard;
+  pthread_t  thread_flgs_ctrl;
   //生成记录仪gif
-  pthread_t  thread_image_jpg;        
+  pthread_t  thread_image_jpg;  
+  //lvgl线程      
+  pthread_t  thread_lvgl_key;        
 
 
 //接口
@@ -351,18 +451,9 @@ void  lcd_line_exit();
 void Open_Video();      //打开摄像头
 // 在 video_car.c 的最顶部添加：
 int open_device(void);
-static void init_device(void);
-static void start_capturing(void);
-static void mainloop(void);
+
 int yuyv_to_rgb_pix(int Y,int Cb,int Cr);
 void yuv2_rgb(unsigned int* read_buf,  char *write_buf);
-
-static void stop_capturing ();
-
-static void uninit_device ();
-
-static void close_device ();
-
 
 void Line_Car(unsigned int *mp);    //辅助线
 GLOBAL(void)
@@ -379,6 +470,10 @@ void *child_keyboard(void * a);  //键盘线程
 void *child_recorder(void * a);
 void * recorder_image_jpg(void *a);
 void *Record_Video(void *a);
+void * child_flgs_ctrl(void* a);
+void * child_lvgl_key(void* a);
+
+
 
 
 void round1(); //显示录制圆点
@@ -399,19 +494,43 @@ void Settings();
 void Login();
 void Key_Board_Open(); //打开键盘
 
+
 //显示字体
 void showfont(int x,int y,int size,int color,const char * font );
 
 //键盘
 char* Key_Board(unsigned int * keyboard_mp,char *p);
-//验证码
+void Clear_Keyboard(char *num,char *keyboard_out,int size);
+void Input_Info(char *num,char * keyboard_out,int size);
+//登录注册界面
+//验证码 
 int  SMS(char * phone_number);
 void SMS_Login();
+void SMS_Get();
+int  SMS_YES();
+
+//注册
+void Login_Istration();
+
+//账号
+void Account_Info();
+
+//状态栏
+void Status_Bar();
+
+
+//退出
+void Return_Set();    //返回设置界面
 
 
 //语音识别的信号
 int socket_c();
 void open_mic();
+
+
+//LVGL
+int Lvgl_Key();
+
 
 void Mmap_Bmp(int lcd_fd,FILE * bmp_fd,unsigned int *mp); //另一个项目
 FILE * Open_Bmp(char * pathname);   //另一个项目的

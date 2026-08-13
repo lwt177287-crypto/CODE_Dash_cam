@@ -18,7 +18,7 @@ void Main_Interface_init()
       
  //显示主界面
 
- read_JPEG_file (CAT_STAT_IMAGE, mp);
+//  read_JPEG_file (CAT_STAT_IMAGE, mp);
    printf("1\n");
 memset(&s_v_c_main,0,sizeof(s_v_c_main));
 memset(&s_realtime_video,0,sizeof(s_realtime_video));
@@ -98,7 +98,9 @@ void Pthread_Init()
     pthread_create(&thread_recorder, NULL,child_recorder,NULL);//打开记录仪
     printf("2\n");
     pthread_create(&thread_flgs_ctrl, NULL,child_flgs_ctrl,NULL);//控制按钮
-    printf("3\n");
+    printf("3\n");   
+     pthread_create(&thread_lvgl_key, NULL,child_lvgl_key,NULL);//控制按钮
+    printf("4\n");
 }
 void Pthread_Join()
 {
@@ -274,8 +276,9 @@ int main()
 // showfont(200,200,100,0xff0000,"小鸡");
   //一个按键一个状态，所以可以阻塞
 
+  // Status_Bar();
+// Lvgl_Key();
 
-// Status_Bar();
 
   for(;;)
   {   
@@ -296,7 +299,7 @@ int main()
         //退出时清理坐标再清空标志位
         s_v_c_main.Interface=1;
         s_v_c_main.set_flgs=0;
-        read_JPEG_file (CAT_STAT_IMAGE, mp);
+        // read_JPEG_file (CAT_STAT_IMAGE, mp);
       }
       else if(MAIN_MIC &&s_v_c_main.Interface==1)  //点击麦克风
       {
