@@ -4,7 +4,6 @@
 void Settings()
 {
     s_v_c_main.Interface=0;
-  read_JPEG_file (SETTINGS_IMAGE, mp);
     int set_state=SET_STATE_SET;
     for(;;)
     {   
@@ -12,20 +11,23 @@ void Settings()
         {  
              case SET_STATE_SET:
             {    
-                if(SET_RETURN &&s_v_c_main.Interface==0)//退出
+                if(s_settings_btn[SET_RETURN_BTN].btn==1)//退出
                 {
+                    s_settings_btn[SET_RETURN_BTN].btn=0;
                     printf("退出设置\n");
                     set_state=SET_STATE_RETURN;
                 }
-                else if(SET_SHUTDOWN&&s_v_c_main.Interface==0 )//关机键
+                else if(s_settings_btn[SHUTDOWN_BTN].btn==1)//关机键
                 {
+                    s_settings_btn[SHUTDOWN_BTN].btn=0;
                     printf("关机！\n");
                     //保存录像
                     set_state=SET_STATE_SHUTDOWN;
                  
                 }
-                else if(SET_LOGIN&&s_v_c_main.Interface==0 )
+                else if(s_settings_btn[LOGIN_BTN].btn==1)
                 {
+                    s_settings_btn[LOGIN_BTN].btn=0;
                     printf("进入登录界面\n");
                     set_state=SET_STATE_LOGIN;
             
@@ -84,6 +86,9 @@ void Settings()
                 }  
             case SET_STATE_SHUTDOWN:
             {
+                       printf("检测到按下关机按钮\n");
+          s_settings.shutdown_flgs=1;
+        //   pthread_exit(NULL);
                    Shut_Down();
                 // set_state=SET_STATE_SET;
                 //     break;

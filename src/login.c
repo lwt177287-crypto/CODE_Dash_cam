@@ -5,46 +5,55 @@ void Login()    //密码登录
 {
     s_v_c_main.set_flgs=0;
     LOGIN_STATE login_state=LOGIN_STATE_PASSWORD;
-    read_JPEG_file (SETTINGS_LOGIN, mp);
+    printf("2\n");
     for(;;)
     {
         if(s_keyboard.Keyboard_flgs!=1)
             switch(login_state)
             {
                 //注意使用完要切回来
-                case LOGIN_STATE_PASSWORD://在密码登录模式
-        
-                    if(s_keyboard.Keyboard_flgs==0)//退出键盘
-                    {
-                        login_state=LOGIN_KEY_BOARD_STATE_TURETN;
-                        s_keyboard.Keyboard_flgs=-1;
-                    }
-                    else if(LOGIN_USERNAME&&s_admin.user_input==0) //点击手机号
-                    {
-                        login_state=LOGIN_STATE_INPUT_USER;
-                    }
-                    else if(LOGIN_PASSWORD&&s_admin.password_input==0)    //点击密码
-                    {
-                        login_state=LOGIN_STATE_INPUT_PASSWORD;
-                    }
-                    else if(LOGIN_SMS)//进入验证码
-                    {
-                        login_state=LOGIN_STATE_IN_SMS;
-                    }
-                 else if(LOGIN_IFICATION)//注册
-                    {
-                      login_state=LOGIN_STATE_ISTRATION;
-                    }
-                
-                    else if( LOGIN_YES) //进入登录
-                    {
-                        login_state=LOGIN_STATE_YES;
-                    }
-                     else if( LOGIN_RETURN) //退出登录
-                    {
-                        login_state=LOGIN_STATE_EXIT;
-                    }
-                    break;
+               case LOGIN_STATE_PASSWORD://在密码登录模式
+
+                if(s_keyboard.Keyboard_flgs==0)//退出键盘
+                {
+                    login_state=LOGIN_KEY_BOARD_STATE_TURETN;
+                    s_keyboard.Keyboard_flgs=-1;
+                }
+                else if(s_login_btn[INPUT_USER_BTN].btn==1&&s_admin.user_input==0) //点击手机号
+                {
+                    s_login_btn[INPUT_USER_BTN].btn=0;
+                    login_state=LOGIN_STATE_INPUT_USER;
+                }
+                else if(s_login_btn[INPUT_PASSWORD_BTN].btn==1&&s_admin.password_input==0)    //点击密码
+                {
+                    s_login_btn[INPUT_PASSWORD_BTN].btn=0;
+                    login_state=LOGIN_STATE_INPUT_PASSWORD;
+                }
+                else if(s_login_btn[IN_MODE_BTN].btn==1)//进入验证码
+                {
+                    s_login_btn[IN_MODE_BTN].btn=0;
+
+                    login_state=LOGIN_STATE_IN_SMS;
+                }
+                else if(s_login_btn[ISTRATION_BTN].btn==1)//注册
+                {
+                    s_login_btn[ISTRATION_BTN].btn=0;
+
+                    login_state=LOGIN_STATE_ISTRATION;
+                }
+                else if(s_login_btn[LOGIN_YES_BTN].btn==1)//进入登录
+                {
+                    s_login_btn[LOGIN_YES_BTN].btn=0;
+                    login_state=LOGIN_STATE_YES;
+                }
+                else if(s_login_btn[LOGIN_EXIT_BTN].btn==1)//退出登录
+                {
+                    s_login_btn[LOGIN_EXIT_BTN].btn=0;
+
+                    login_state=LOGIN_STATE_EXIT;
+                }
+
+                break;
                 case LOGIN_STATE_INPUT_USER://输入账号
                 {
                     s_admin.user_input=1;
@@ -73,7 +82,7 @@ void Login()    //密码登录
                     en0_clear();
                     printf("进入验证码登录\n");
                     memset(&s_keyboard,0,sizeof(s_keyboard));
-                    read_JPEG_file (SETTINGS_SMS_LOGIN, mp);
+                    // read_JPEG_file (SETTINGS_SMS_LOGIN, mp);
                     SMS_Login();   //进入验证码登录页面
                     //退出页面判断是返回密码验证还是返回设置 
                     printf("返回密码登录\n");
@@ -95,7 +104,8 @@ void Login()    //密码登录
                     en0_clear();
                     printf("进入\n");
                     memset(&s_keyboard,0,sizeof(s_keyboard));
-                    read_JPEG_file (SETTINGS_ISTRATION, mp);
+                    // read_JPEG_file (SETTINGS_ISTRATION, mp);
+                    s_instration_re.form_pd=1;
                     Login_Istration();   //进入注册页面
                     // 要判断哪种验证进来的
                     printf("返回密码登录\n");
@@ -124,6 +134,7 @@ void Login()    //密码登录
                             printf("手机号格式错误\n");
                             en0_clear();
                             login_state=LOGIN_STATE_PASSWORD;
+                            sem_post(&sem_input_info);
                             break;
                         }
     
@@ -134,6 +145,7 @@ void Login()    //密码登录
                         printf("打开账号文件失败，登录失败！\n");
                         en0_clear();
                         login_state=INSTRATTON_STATE;
+                            sem_post(&sem_input_info);
                         break;
                     }
                     char admin_info_buf[100]={0};
@@ -162,6 +174,7 @@ void Login()    //密码登录
                                 }
                                 printf("登录成功\n");
                                 s_admin.admin_login_flgs=1;
+                            sem_post(&sem_input_info);
                                 en0_clear();
 
                                 login_state=LOGIN_STATE_PASSWORD;
@@ -173,6 +186,7 @@ void Login()    //密码登录
                         }
                     }
                     printf("手机号或密码错误！\n");
+                            sem_post(&sem_input_info);
                 
                 
                     en0_clear();
@@ -233,46 +247,55 @@ void SMS_Login()
             switch(login_state)
             {
                 //注意使用完要切回来
-                case LOGIN_STATE_SMS://在密码登录模式
-                    if(s_keyboard.Keyboard_flgs==0)//退出键盘
-                    {
-                        login_state=LOGIN_KEY_BOARD_STATE_TURETN;
-                        s_keyboard.Keyboard_flgs=-1;
-                    }
-                    else if(LOGIN_USERNAME&&s_admin.user_input==0) //输入手机号
-                    {
-                        login_state=LOGIN_STATE_INPUT_USER;
-                    }
-                    else if(LOGIN_PASSWORD&&s_admin.password_input==0)    //输入验证码
-                    {
-                        login_state=LOGIN_STATE_INPUT_PASSWORD;
-                    }
-                    else if(LOGIN_SMS)//进入密码登录模式
-                    {
-                        login_state=LOGIN_STATE_IN_PASSWORD;
-                    }
-                
-                    else if(LOGIN_GET_SMS)//获取验证码
-                    {
-                        login_state=LOGIN_STATE_GET_SMS;
-                    }
-                
-                    else if(LOGIN_IFICATION)//注册
-                    {
-                        login_state=LOGIN_STATE_ISTRATION;
-                    }
-                
-                    else if( LOGIN_RETURN) //退出登录
-                    {
-                        login_state=LOGIN_STATE_EXIT;
-                    }
+                case LOGIN_STATE_SMS://短信登录模式
+                if(s_keyboard.Keyboard_flgs==0)//退出键盘
+                {
+                    login_state=LOGIN_KEY_BOARD_STATE_TURETN;
+                    s_keyboard.Keyboard_flgs=-1;
+                }
+                else if(s_login_btn[INPUT_USER_BTN].btn==1&&s_admin.user_input==0) //输入手机号
+                {
+                    s_login_btn[INPUT_USER_BTN].btn=0;
 
-                    else if(LOGIN_YES ) //登录
-                    {
-                        login_state=LOGIN_STATE_YES;
-                    }
-                    
-                    break;
+                    login_state=LOGIN_STATE_INPUT_USER;
+                }
+                else if(s_login_btn[INPUT_PASSWORD_BTN].btn==1&&s_admin.sms_input==0) //输入验证码
+                {
+                    s_login_btn[INPUT_PASSWORD_BTN].btn=0;
+
+                    login_state=LOGIN_STATE_INPUT_PASSWORD;
+                }
+                else if(s_login_btn[IN_MODE_BTN].btn==1)//进入密码登录模式
+                {
+                    s_login_btn[IN_MODE_BTN].btn=0;
+
+                    login_state=LOGIN_STATE_IN_PASSWORD;
+                }
+                else if(s_login_btn[GET_SMS_BTN].btn==1)//获取验证码
+                {
+                    s_login_btn[GET_SMS_BTN].btn=0;
+
+                    login_state=LOGIN_STATE_GET_SMS;
+                }
+                else if(s_login_btn[ISTRATION_BTN].btn==1)//注册
+                {
+                    s_login_btn[ISTRATION_BTN].btn=0;
+
+                    login_state=LOGIN_STATE_ISTRATION;
+                }
+                else if(s_login_btn[LOGIN_SMS_YES_BTN].btn==1)//登录
+                {
+                    s_login_btn[LOGIN_SMS_YES_BTN].btn=0;
+                    login_state=LOGIN_STATE_YES;
+                }
+                else if(s_login_btn[LOGIN_EXIT_BTN].btn==1)//退出登录
+                {
+                    s_login_btn[LOGIN_EXIT_BTN].btn=0;
+
+                    login_state=LOGIN_STATE_EXIT;
+                }
+
+                break;
                         
                 case LOGIN_STATE_INPUT_USER://输入手机号
                 {
@@ -315,8 +338,9 @@ void SMS_Login()
                         en0_clear();
                         printf("进入\n");
                         //清空键盘
+                        s_instration_re.form_SMS=1;
                         memset(&s_keyboard,0,sizeof(s_keyboard));
-                        read_JPEG_file (SETTINGS_ISTRATION, mp);
+                        // read_JPEG_file (SETTINGS_ISTRATION, mp);
                         Login_Istration();   //进入注册页面
                         // 要判断哪种验证进来的
                         printf("返回登录\n");
@@ -329,8 +353,7 @@ void SMS_Login()
                         {
                             return;
                         }
-                
-                }
+                    }
 
                 case LOGIN_STATE_YES://确认
                 {
@@ -338,8 +361,9 @@ void SMS_Login()
                          int start =SMS_YES();
                     if(start==INSTRATTON_STATE)
                     {
-                        login_state=INSTRATTON_STATE;
+                        login_state=LOGIN_STATE_SMS;
                         printf("检测到错误\n");
+                        sem_post(&sem_input_info);
                         break;
                     }
                  
@@ -349,6 +373,7 @@ void SMS_Login()
                         printf("打开账号文件失败，登录失败！\n");
                         en0_clear();
                         login_state=INSTRATTON_STATE;
+                            sem_post(&sem_input_info);
                         break;
                     }
                     char admin_info_buf[100]={0};
@@ -376,6 +401,7 @@ void SMS_Login()
                             }
                             printf("登录成功\n");
                             s_admin.admin_login_flgs=1;
+                            sem_post(&sem_input_info);
                             en0_clear();
                             login_state=LOGIN_STATE_SMS;
                             fclose(admin_fp);
@@ -388,6 +414,7 @@ void SMS_Login()
                         //将账号信息拷贝
                         //清除键盘
                         //返回设置界面
+                        sem_post(&sem_input_info);
                     
                         en0_clear();
                         login_state=LOGIN_STATE_SMS;
@@ -465,50 +492,63 @@ void  Login_Istration()
             switch(instratton_state)
             {
                 //注意使用完要切回来
-                case INSTRATTON_STATE://在注册模式
-                    if(s_keyboard.Keyboard_flgs==0)//退出键盘
-                    {
-                        instratton_state=INSTRATTON_KEY_BOARD_STATE_TURETN;
-                        s_keyboard.Keyboard_flgs=-1;
-                    }
-                    else if(INSTRATTON_USERNAME&&s_admin.user_input==0) //输入手机号
-                    {
-                        instratton_state=INSTRATTON_STATE_INPUT_USER;
-                    }
-                    else if(INSTRATTON_SMS&&s_admin.sms_input==0)    //输入验证码
-                    {
-                        instratton_state=INSTRATTON_STATE_INPUT_SMS;
-                    }
-              
-                    else if(INSTRATTON_PASSWORD&&s_admin.password_input==0)    //输入密码
-                    {
-                        instratton_state=INSTRATTON_STATE_INPUT_PASSWORD;
-                    }
-              
-                    else if(INSTRATTON_AGAIN_PASSWORD&&s_admin.password_input==0)    //再次输入
-                    {
-                        instratton_state=INSTRATTON_STATE_AGAIN_INPUT_PASSWORD;
-                    }
-                    else if(INSTRATTON_GET_SMS)//获取验证码
-                    {
-                        instratton_state=INSTRATTON_STATE_GET_SMS;
-                    }
-                
-                    else if( INSTRATTON_RETURN) //退出注册
-                    {
-                        instratton_state=INSTRATTON_STATE_EXIT;
-                    }
+               case INSTRATTON_STATE://在注册模式
 
-                    else if(INSTRATTON_LOGIN) //返回登录
-                    {
-                        instratton_state=INSTRATTON_STATE_LONIG;
-                    }
+                if(s_keyboard.Keyboard_flgs==0)//退出键盘
+                {
+                    instratton_state=INSTRATTON_KEY_BOARD_STATE_TURETN;
+                    s_keyboard.Keyboard_flgs=-1;
+                }
+                else if(s_instration_btn[INPUT_USER_BTN].btn==1&&s_admin.user_input==0) //输入手机号
+                {
+                    s_instration_btn[INPUT_USER_BTN].btn=0;
 
-                    else if(INSTRATTON_YES ) //确认注册
-                    {
-                        instratton_state=INSTRATTON_STATE_YES;
-                    }
-                    break;
+                    instratton_state=INSTRATTON_STATE_INPUT_USER;
+                }
+                else if(s_instration_btn[INPUT_SMS_BTN].btn==1&&s_admin.sms_input==0) //输入验证码
+                {
+                    s_instration_btn[INPUT_SMS_BTN].btn=0;
+
+                    instratton_state=INSTRATTON_STATE_INPUT_SMS;
+                }
+                else if(s_instration_btn[INPUT_PASSWORD_BTN].btn==1&&s_admin.password_input==0) //输入密码
+                {
+                    s_instration_btn[INPUT_PASSWORD_BTN].btn=0;
+
+                    instratton_state=INSTRATTON_STATE_INPUT_PASSWORD;
+                }
+                else if(s_instration_btn[INPUT_AGAIN_PASSWORD_BTN].btn==1&&s_admin.password_again_input==0) //再次输入密码
+                {
+                    s_instration_btn[INPUT_AGAIN_PASSWORD_BTN].btn=0;
+
+                    instratton_state=INSTRATTON_STATE_AGAIN_INPUT_PASSWORD;
+                }
+                else if(s_instration_btn[GET_SMS_BTN].btn==1)//获取验证码
+                {
+                    s_instration_btn[GET_SMS_BTN].btn=0;
+
+                    instratton_state=INSTRATTON_STATE_GET_SMS;
+                }
+                else if(s_instration_btn[LOGIN_EXIT_BTN].btn==1)//退出注册
+                {
+                    s_instration_btn[LOGIN_EXIT_BTN].btn=0;
+
+                    instratton_state=INSTRATTON_STATE_EXIT;
+                }
+                else if(s_instration_btn[IN_MODE_BTN].btn==1)//返回登录
+                {
+                    s_instration_btn[IN_MODE_BTN].btn=0;
+
+                    instratton_state=INSTRATTON_STATE_LONIG;
+                }
+                else if(s_instration_btn[INSTRATION_YES_BTN].btn==1)//确认注册
+                {
+                    s_instration_btn[INSTRATION_YES_BTN].btn=0;
+
+                    instratton_state=INSTRATTON_STATE_YES;
+                }
+
+                break;
                         
                 case INSTRATTON_STATE_INPUT_USER://输入手机号
                 {
@@ -573,29 +613,30 @@ void  Login_Istration()
                     int start =SMS_YES();
                     if(start==INSTRATTON_STATE)
                     {
-                        instratton_state=INSTRATTON_STATE;
                         printf("检测到错误\n");
+                        sem_post(&sem_input_info);
                         break;
                     }
                     
-                   
-                    printf("1\n");
                     if(strcmp(s_keyboard.password,s_keyboard.again_password)!=0 ||strlen(s_keyboard.password)==0)
                     {
                           en0_clear();
                           printf("两次密码不一样/密码不能为空\n");
                         instratton_state=INSTRATTON_STATE;
+                        sem_post(&sem_input_info);
                          break;
                     }
                     //判断是否注册过
                         FILE * admin_fp;
                         if(NULL== (admin_fp=fopen(ADMIN_DATA_PATH,"a+")) )    //没有则创建,追加
                         {
-                          printf("打开账号文件失败，注册失败！\n");
+                            printf("打开账号文件失败，注册失败！\n");
                             en0_clear();
                             instratton_state=INSTRATTON_STATE;
+                            sem_post(&sem_input_info);
                             break;
                         }
+
                         //  记录注册账号的信息，与文件存储的账号是否重复
                         char admin_info_buf[100]={0};
                         int search_account=1;
@@ -610,8 +651,8 @@ void  Login_Istration()
                                   instratton_state=INSTRATTON_STATE;
                                   fclose(admin_fp);
                                   //清空该验证码，因为已经没用，也可以不清空让他用来登录
-                                  memset(s_admin.sms_out,0,strlen(s_admin.sms_out));
-                                  printf("验证码不可用\n");
+                                //   memset(s_admin.sms_out,0,strlen(s_admin.sms_out));
+                                //   printf("验证码不可用\n");
                                    search_account=0;
                                    break;
                                 }
@@ -620,27 +661,28 @@ void  Login_Istration()
                         if(search_account==0)
                         {
                             instratton_state=INSTRATTON_STATE;
+                            sem_post(&sem_input_info);
                             break;
                         }
                     
-                        //写入数据
-                          memcpy(s_admin.phone_number,
+                        //写入数据,是要直接登录还是在输入一次？
+                        memcpy(s_admin.phone_number,
                                 s_keyboard.phone_number,
                                 strlen(s_keyboard.phone_number));
                                 
                         memcpy(s_admin.password,
                                 s_keyboard.password,
-                                strlen(s_keyboard.password));
-                                            
+                                    strlen(s_keyboard.password));
+                                    
                         sprintf(admin_info_buf,"%s,%s,vip=0\r\n",s_admin.phone_number,s_admin.password);
                         fwrite(admin_info_buf,1,strlen(admin_info_buf),admin_fp);
                         printf("注册成功！\n");
                         fclose(admin_fp);
-                     
+                        
                         //切到登录界面登录
                         instratton_state=INSTRATTON_STATE_LONIG;
+                        sem_post(&sem_input_info);
                         break;
-                    
                 }
                 case INSTRATTON_KEY_BOARD_STATE_TURETN://键盘退出
                 {
@@ -684,7 +726,7 @@ void  Login_Istration()
                         instratton_state=INSTRATTON_STATE;
                         break;
                 }  
-                case LOGIN_STATE_EXIT://退出
+                case    INSTRATTON_STATE_EXIT://退出
                 {
                     en0_clear();
                     Return_Set();

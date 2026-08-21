@@ -1,4 +1,3 @@
-
 #include "video_car.h"
 
 
@@ -7,15 +6,15 @@ void *child_keyboard(void * a)
      //获取被键盘覆盖的区域
     //这里键盘大小为800*240
     printf("进入键盘线程\n");
-    unsigned int * keyboard_mp=(unsigned int *)calloc(240*800,sizeof(unsigned int));
+    // unsigned int * keyboard_mp=(unsigned int *)calloc(240*800,sizeof(unsigned int));
     char *p=s_keyboard.keyboard_out;
     p+=strlen(s_keyboard.keyboard_out);
-    memcpy(
-            keyboard_mp,
-            mp+(HEIGHT-240)*WIDTH,
-            240*WIDTH*sizeof(unsigned int)
-            );
-    read_JPEG_file (KEYBOARD_IMAGE, mp+(HEIGHT-240)*WIDTH);
+    // memcpy(
+    //         keyboard_mp,
+    //         mp+(HEIGHT-240)*WIDTH,
+    //         240*WIDTH*sizeof(unsigned int)
+    //         );
+    // read_JPEG_file (KEYBOARD_IMAGE, mp+(HEIGHT-240)*WIDTH);
 
     for(;;)
     {
@@ -23,16 +22,17 @@ void *child_keyboard(void * a)
         {   
             printf("键盘输出已满!!\n");
         }
-         p = Key_Board(keyboard_mp,p);
-            usleep(10000);
-        if((KEYBOARD_CLOSE||KEYBOARD_RETURN)&& s_keyboard.Keyboard_flgs==1)//关闭
+         p = Key_Board(p);
+            usleep(1000);
+        if((s_login_btn[KEY_BOARD_STATE_TURETN_BTN].btn==1)&& s_keyboard.Keyboard_flgs==1)//关闭
         {   
+            s_login_btn[KEY_BOARD_STATE_TURETN_BTN].btn=0;
             // printf("eno_x=%d,eno_y=%d\n",en0_x,en0_y);
             printf("%d\n",KEYBOARD_CLOSE);
             printf("%d\n",KEYBOARD_RETURN);
             printf("退出键盘\n");
-            memcpy(mp+(HEIGHT-240)*WIDTH,keyboard_mp,240*WIDTH*sizeof(unsigned int));
-            free(keyboard_mp);
+            // memcpy(mp+(HEIGHT-240)*WIDTH,keyboard_mp,240*WIDTH*sizeof(unsigned int));
+            // free(keyboard_mp);
             s_keyboard.Keyboard_flgs=0;
             pthread_exit(NULL);
         
@@ -40,7 +40,7 @@ void *child_keyboard(void * a)
     }
 }
 
-char* Key_Board(unsigned int * keyboard_mp,char *p)
+char* Key_Board(char *p)
 {
     if(s_keyboard.Keyboard_flgs==1&&KEYBOARD_1&&strlen(s_keyboard.keyboard_out)<99)
     {
@@ -151,8 +151,6 @@ char* Key_Board(unsigned int * keyboard_mp,char *p)
         en0_clear();
         if(p!=s_keyboard.keyboard_out)
         {
-            printf("%p\n",s_keyboard.keyboard_out);
-            printf("%p\n",p);
             memmove(p-1,p,strlen(p)+1);
             p--;
         printf("%s\n",s_keyboard.keyboard_out);

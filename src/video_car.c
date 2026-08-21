@@ -230,8 +230,10 @@ mainloop()
           //每次都保存到
             pthread_mutex_lock(&mutex_reading_flgs);
             p_buffer[buf_i]=buffers[buf.index].start;
-             read_index=buf_i; 
+             read_index=buf_i;
             s_recorder.new_Camera_frame_flgs=1;
+            //拷贝一份给推流服务器（避免 QBUF 后这块缓冲被摄像头覆盖）
+            memcpy(g_stream_yuyv, buffers[buf.index].start, IMAGE_WIDTH*IMAGE_HEIGHT*2);
           pthread_mutex_unlock(&mutex_reading_flgs);
 
          

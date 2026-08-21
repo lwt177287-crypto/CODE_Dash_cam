@@ -151,3 +151,18 @@ void * recorder_image_jpg(void *a)
     // sprintf(filename,"%s-Car",filetime);
     // mkdir(filename,0777);
     // chdir(filename);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

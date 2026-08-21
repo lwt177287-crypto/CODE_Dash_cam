@@ -11,33 +11,39 @@ void Account_Info()
     {
         switch (E_account_start)
         {
-            case ACCOUNT_START:
-                if(ACCOUNT_VIP_RECHARGE)
-                {
-                    E_account_start=ACCOUNT_START_VIP_RECHARGE;
-                    break;
-                }
-                else  if(ACCOUNT_SAFE)
-                {
-                    E_account_start=ACCOUNT_START_SAFE;
-                    break;
-                }
-                else  if(ACCOUNT_DEVICE_MANAGEMENT)
-                {
-                    E_account_start=ACCOUNT_START_DEVICE_MANAGEMENT;
-                    break;
-                }
-                else if(ACCOUNT_EXIT)
-                {
-                    E_account_start=ACCOUNT_START_EXIT;
-                    break;
-                }
-                else if(ACCOUNT_RETURN)
-                {
-                    E_account_start=ACCOUNT_START_RETURN;
-                    break;
-                }
-                break;
+          case ACCOUNT_START:
+        if(account_info_btn[ACCOUNT_VIP_BTN].btn==1)
+        {
+            account_info_btn[ACCOUNT_VIP_BTN].btn=0;
+
+            E_account_start=ACCOUNT_START_VIP_RECHARGE;
+            break;
+        }
+        else  if(ACCOUNT_SAFE)
+        {
+            E_account_start=ACCOUNT_START_SAFE;
+            break;
+        }
+        else  if(ACCOUNT_DEVICE_MANAGEMENT)
+        {
+            E_account_start=ACCOUNT_START_DEVICE_MANAGEMENT;
+            break;
+        }
+        else if(account_info_btn[ACCOUNT_EXIT_BTN].btn==1)
+        {
+            account_info_btn[ACCOUNT_EXIT_BTN].btn=0;
+
+            E_account_start=ACCOUNT_START_EXIT;
+            break;
+        }
+        else if(account_info_btn[ACCOUNT_RETURN_BTN].btn==1)
+        {
+            account_info_btn[ACCOUNT_RETURN_BTN].btn=0;
+
+            E_account_start=ACCOUNT_START_RETURN;
+            break;
+        }
+        break;
             case ACCOUNT_START_VIP_RECHARGE://vip
             {
                 en0_clear();

@@ -8,7 +8,7 @@ void Main_Interface_init()
 {
  // 显示开机动画
 
-  // char pdf[100]={0};
+  // char pdf[177]={0};
   //   for(int i=0;i<177;i++)
   //     {
   //       sprintf(pdf,"LX/FLLX%d.jpg",i);
@@ -16,16 +16,42 @@ void Main_Interface_init()
   //       usleep(1000);
   //     }    
       
- //显示主界面
+
+
+  //广告
+  
+// if(s_admin.admin_login_flgs!=1)
+// {
+//    char pdf[177]={0};
+//  int now_time=time(NULL);
+//     for(int i=0;i<=71;i++)
+//       {
+        
+//         sprintf(pdf,"/root/shiyan/CODE/guanggao/Frame%d.jpg",i);
+//         read_JPEG_file (pdf, mp);
+//         usleep(50000);
+//         if(time(NULL)-now_time>=5)
+//         {
+//           //点击跳过
+//         }
+//       }    
+// }
+ 
+ 
+ 
+  //显示主界面
+
 
 //  read_JPEG_file (CAT_STAT_IMAGE, mp);
-   printf("1\n");
 memset(&s_v_c_main,0,sizeof(s_v_c_main));
 memset(&s_realtime_video,0,sizeof(s_realtime_video));
 memset(&s_recorder,0,sizeof(s_recorder));
 memset(&s_keyboard,0,sizeof(s_keyboard));
 memset(&s_settings,0,sizeof(s_settings));
+memset(&s_instration_re,0,sizeof(s_instration_re));
 memset(&s_SMS_verification_code,0,sizeof(s_SMS_verification_code));
+memset(&s_admin,0,sizeof(s_admin));
+
 s_v_c_main.Interface=1;
 s_keyboard.Keyboard_flgs=-1;
 
@@ -40,6 +66,8 @@ write_buf=NULL;
  sem_init(&sem_record_video_flgs, 0, 0);
  sem_init(&sem_recorder_complete, 0, 0);
 sem_init(&sem_Realtime_video, 0, 0);
+sem_init(&sem_lvgl, 0, 0);
+sem_init(&sem_input_info, 0, 0);
 pthread_cond_init(&sem_en0_ABS, NULL);
 pthread_cond_init(&sem_key, NULL);
 
@@ -99,8 +127,12 @@ void Pthread_Init()
     printf("2\n");
     pthread_create(&thread_flgs_ctrl, NULL,child_flgs_ctrl,NULL);//控制按钮
     printf("3\n");   
-     pthread_create(&thread_lvgl_key, NULL,child_lvgl_key,NULL);//控制按钮
+     pthread_create(&thread_lvgl_key, NULL,child_lvgl_key,NULL);//lvgl按钮
     printf("4\n");
+    pthread_t thread_stream;
+    pthread_create(&thread_stream, NULL, stream_server_thread, NULL);//推流服务器
+    pthread_detach(thread_stream);
+    printf("5\n");
 }
 void Pthread_Join()
 {
@@ -120,10 +152,11 @@ void Pthread_Join()
 
 void Realtime_Video() //打开实时画面
 {
+  s_main_btn[REALTIME_VIDEO_BTN].btn=0;
   s_v_c_main.Interface=0;//切换界面，主界面标志位关闭
   s_v_c_main.video_flgs=1;//切换到lcd摄像
   printf("用户点击打开相机\n");
-  read_JPEG_file (TRALTIME_IMAGE,lcd_fp);
+  // read_JPEG_file (TRALTIME_IMAGE,lcd_fp);
         
 //将摄像头采集的图片放在buffer_mp里
   pthread_create(&thread_lcd_buf, NULL,child_Realtime_buf,NULL);
@@ -145,6 +178,10 @@ void Realtime_Video() //打开实时画面
   printf("333\n");
   en0_clear();
   //挺多共用的出来再关    
+
+  memset(s_realtime_video_btn,0,sizeof(s_realtime_video_btn));
+
+
   s_v_c_main.video_flgs=0;//退出lcd摄像
   //添加退出按钮
 }
@@ -167,8 +204,7 @@ void Shut_Down()
 }
 
 
-
-
+//此线程还未关闭
 void * child_flgs_ctrl(void* a)
 {
   printf("进入按键检测\n");
@@ -186,7 +222,7 @@ void * child_flgs_ctrl(void* a)
       // s_realtime_video.round_flgs,s_realtime_video.record_video_flgs);
     
       //没有录像时点击录制
-      if(REALTIME_RECOE&&s_realtime_video.round_flgs==0&& s_realtime_video.record_video_flgs==0)
+      if(REALTIME_RECOER&&s_realtime_video.round_flgs==0&& s_realtime_video.record_video_flgs==0)
       {
         printf("按下录制按钮\n");
         //通知
@@ -199,7 +235,7 @@ void * child_flgs_ctrl(void* a)
       //关闭
       //正在录制标志时点击录像
       //因为按下录制这两个是一起的
-      else if(REALTIME_RECOE&&s_realtime_video.round_flgs==1&&s_realtime_video.record_video_flgs==1)   
+      else if(REALTIME_RECOER&&s_realtime_video.round_flgs==1&&s_realtime_video.record_video_flgs==1)   
       {
         printf("按下关闭按钮\n");
         s_realtime_video.round_exit=1;
@@ -218,26 +254,27 @@ void * child_flgs_ctrl(void* a)
     }
     else if(s_v_c_main.Interface==1)
     {
-      if(MAIN_RECORD_VIDEO_SAVE&&s_recorder.recorder_flgs==0)
-      {
-        s_recorder.recorder_play=1;
-        s_recorder.recorder_create=1;
-        s_recorder.recorder_flgs=1;
-      }
- 
-    }
-    else if(s_v_c_main.set_flgs==1)
-    {
-       if(SET_SHUTDOWN)
-        {
-          //关机
-          printf("检测到按下关机按钮\n");
-          s_settings.shutdown_flgs=1;
-          pthread_exit(NULL);
-
-        }
-    }
+      //点击保存记录仪按钮
+    //   if(MAIN_RECORD_VIDEO_SAVE&&s_recorder.recorder_flgs==0)
+    //   {
+    //     // s_recorder.recorder_play=1;
+    //     // s_recorder.recorder_create=1;
+    //     // s_recorder.recorder_flgs=1;
+    //   }
+    // }
+    // else if(s_v_c_main.set_flgs==1)
+    // {
+    //    if(SET_SHUTDOWN)
+    //     {
+    //       //关机
+    //       // printf("检测到按下关机按钮\n");
+    //       // s_settings.shutdown_flgs=1;
+    //       // pthread_exit(NULL);
+    //     }
     
+  
+    }
+ 
 
   }
 }
@@ -282,37 +319,44 @@ int main()
 
   for(;;)
   {   
-    if( OPEN_FILM&&s_v_c_main.Interface==1&&s_v_c_main.video_flgs==0)//在主界面点击此坐标有效,进入倒车影像界面
+    // printf("s_main_btn[REALTIME_VIDEO_BTN].btn=%d\n",s_main_btn[REALTIME_VIDEO_BTN].btn);
+    // if( OPEN_FILM&&s_v_c_main.Interface==1&&s_v_c_main.video_flgs==0)//在主界面点击此坐标有效,进入倒车影像界面
+    if(s_main_btn[REALTIME_VIDEO_BTN].btn==1)
       {
-        //打开显示屏实时画面
+        //打开显示屏实时画面  
             Realtime_Video();
-          read_JPEG_file (CAT_STAT_IMAGE, mp);
-
+          // read_JPEG_file (CAT_STAT_IMAGE, mp);
       } //
-      else if(MAIN_SETTINGS &&s_v_c_main.Interface==1)//进入设置
-      {
+    else if(s_main_btn[SETTINGS_BTN].btn==1)//进入设置
+     {
+        s_main_btn[SETTINGS_BTN].btn=0;
         s_v_c_main.set_flgs=1;
         en0_clear();
         printf("进入设置\n");
         Settings();
+        printf("退出设置\n");
         en0_clear();
         //退出时清理坐标再清空标志位
-        s_v_c_main.Interface=1;
         s_v_c_main.set_flgs=0;
         // read_JPEG_file (CAT_STAT_IMAGE, mp);
-      }
-      else if(MAIN_MIC &&s_v_c_main.Interface==1)  //点击麦克风
+     }
+    else if(MAIN_MIC &&s_v_c_main.Interface==1)  //点击麦克风
       {
         en0_clear();
         open_mic();
       }
       //之后改成文件夹，点开后可选择看记录仪或录像，现在直接播放行车记录仪
-      else if( s_recorder.recorder_play==1)  //点击行车记录仪
-      {               
+  
+      else if(s_main_btn[MAIN_REALTIME_RECOER_BTN].btn==1&& s_recorder.recorder_flgs==0)  //点击行车记录仪
+      {
+        s_main_btn[MAIN_REALTIME_RECOER_BTN].btn=0;
+        
+        //没做重复点击检测
         //当视频准备好，就播放，现在视频生成实在太久，不用理会
         printf("开始播放记录仪\n");
         // 生成视频完毕，可以播放
-        s_recorder.recorder_play=0;
+        s_recorder.recorder_create=1;
+        s_recorder.recorder_flgs=1;
       }
       else if(MAIN_DIR &&s_v_c_main.Interface==1&&s_recorder.recorder_flgs==0)  //点击文件夹，要有给文件夹上锁功能
       {
@@ -364,7 +408,6 @@ int main()
 
 (7)系统支持车辆健康监测功能，能够实时监测车辆的发动机、轮胎、电池等关键部件的状态。当检测到异常时，系统会发出故障预警，提醒用户及时维修。
 
-*/
 
 
 
